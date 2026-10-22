@@ -1,0 +1,8 @@
+# Pastas de cache e sistema do Chaos Cosmos
+Lock/
+Packages/
+Updates/
+
+# Python cache
+__pycache__/
+*.pyc
