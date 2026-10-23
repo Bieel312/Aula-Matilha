@@ -165,6 +165,16 @@ const TUPA_KNOWLEDGE_BASE = {
       resumo: "Endereço do Paço, horários, UPA 24h, telefones de emergência e IPTU.",
       itens: [
         {
+          pergunta: "Quem é o Prefeito e como funciona a Administração de Tupã?",
+          resposta: "A **Prefeitura da Estância Turística de Tupã** tem sede no Paço Municipal, na **Praça da Bandeira, nº 800 - Centro** (PABX: 14 3404-1000).\n\n" +
+            "- O Poder Executivo Municipal é chefiado pelo Prefeito e seu gabinete, coordenando as secretarias de Educação, Saúde, Obras e Trânsito, Economia e Finanças, Agricultura e Meio Ambiente, Cultura e Turismo, Assistência Social e Administração.\n" +
+            "- O atendimento ao cidadão no Paço Municipal funciona de segunda a sexta-feira, das 07h30 às 13h30.\n" +
+            "- O portal oficial de transparência e serviços é o **www.tupa.sp.gov.br**.",
+          palavrasChave: ["quem e o prefeito", "prefeito", "prefeita", "gabinete", "administracao de tupa", "governo", "paco municipal"],
+          sugestoes: ["Qual o endereço da Prefeitura?", "Qual o orçamento anual de Tupã?", "Como emitir 2ª via de IPTU?"],
+          fonte: "Portal Oficial da Prefeitura de Tupã (tupa.sp.gov.br)"
+        },
+        {
           pergunta: "Qual o endereço, telefone e horário da Prefeitura de Tupã?",
           resposta: "Informações oficiais da sede administrativa:\n\n" +
             "- **Endereço:** Praça da Bandeira, nº 800 - Centro - CEP 17600-900 (Paço Municipal).\n" +
@@ -249,13 +259,24 @@ const TUPA_KNOWLEDGE_BASE = {
       resumo: "Luiz de Souza Leão, o nome Tupi de Deus e a pacificadora Índia Vanuíre.",
       itens: [
         {
+          pergunta: "Quem foi Luiz de Souza Leão?",
+          resposta: "**Luiz de Souza Leão** foi o grande **fundador, desbravador e idealizador de Tupã**!\n\n" +
+            "- **História e Fundação:** Fazendeiro e empreendedor visionário, adquiriu na década de 1920 a grande gleba de terras no espigão divisor entre os rios Feio (Aguapeí) e do Peixe, fundando a cidade oficialmente em **12 de outubro de 1929**.\n" +
+            "- **Traçado Urbano Inovador:** Visionário, desenhou pessoalmente o plano da cidade com avenidas monumentais de **30 metros de largura** e praças amplas, antecipando a necessidade de arborização, circulação de vento e luz solar.\n" +
+            "- **Solar Histórico:** A residência onde viveu (na Rua Caingangs, 600) é hoje o célebre **Solar Luiz de Souza Leão**, casarão tombado pelo **CONDEPHAAT** como Patrimônio Histórico do Estado de SP com seus móveis originais e bosque de espécies nativas.\n" +
+            "- **Homenagem Indígena:** Foi ele quem escolheu o nome **Tupã** (o Criador / Deus do Trovão em Tupi) em reverência aos povos indígenas ancestrais da região.",
+          palavrasChave: ["quem foi souza leao", "souza leao", "luiz de souza leao", "souza", "leao", "fundador", "biografia fundador", "quem criou tupa"],
+          sugestoes: ["O que é o Solar Luiz de Souza Leão?", "Quem foi a Índia Vanuíre?", "Como Tupã foi fundada em 1929?"],
+          fonte: "Arquivo Histórico Municipal de Tupã & Secretaria Municipal de Cultura"
+        },
+        {
           pergunta: "Como e quando Tupã foi fundada?",
           resposta: "Tupã foi fundada oficialmente em **12 de outubro de 1929** por **Luiz de Souza Leão**.\n\n" +
             "- Ele adquiriu terras no espigão entre as bacias dos rios Aguapeí (Feio) e do Peixe.\n" +
             "- Visionário, traçou ruas e avenidas com **30 metros de largura**, garantindo iluminação natural, arborização e um planejamento urbano exemplar para a época.\n" +
             "- O dia 12 de outubro foi escolhido por ser o Dia de Nossa Senhora Aparecida e Dia da Criança.",
           palavrasChave: ["fundacao", "fundador", "luiz de souza leao", "historia de tupa", "12 de outubro de 1929", "quando foi fundada"],
-          sugestoes: ["Por que a cidade se chama Tupã?", "Quem foi a Índia Vanuíre?", "O que é o Solar Luiz de Souza Leão?"],
+          sugestoes: ["Quem foi Luiz de Souza Leão?", "Por que a cidade se chama Tupã?", "Quem foi a Índia Vanuíre?"],
           fonte: "Arquivo Histórico Municipal de Tupã & Museu dos Pioneiros"
         },
         {
