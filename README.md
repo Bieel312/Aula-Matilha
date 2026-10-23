@@ -1,69 +1,54 @@
-# 🏛️ Tupã IA - Especialista na Estância Turística de Tupã (SP)
+# 🏛️ Tupã IA - Portal e Chatbot da Estância Turística de Tupã (SP)
 
-Um site moderno e interativo com um **Chatbot com Modelo de Linguagem e Base de Conhecimento Especializada** sobre a história, cultura, turismo, educação e economia da cidade de **Tupã - SP**.
+Portal interativo e assistente virtual inteligente alimentado com as informações oficiais da **Prefeitura da Estância Turística de Tupã** ([tupa.sp.gov.br](https://www.tupa.sp.gov.br)), história, patrimônio cultural, turismo, serviços ao cidadão, educação e agronegócio.
 
-![Tupã IA](https://img.shields.io/badge/Status-Online-success?style=for-the-badge)
-![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
-![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
-![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
-
----
-
-## 🌟 Destaques do Projeto
-
-- 🤖 **Chatbot Inteligente Especializado:** Motor de linguagem e busca semântica embutido com centenas de dados históricos, culturais e geográficos de Tupã.
-- ⚡ **100% Funcional sem Dependências:** Funciona imediatamente em qualquer navegador ao abrir o `index.html` (não requer instalação de servidor ou chave de API obrigatória).
-- 🧠 **Integração Opcional com Google Gemini:** Permite conectar sua própria chave do Gemini para respostas generativas em tempo real mantendo o contexto especializado de Tupã.
-- 🎨 **Interface Moderna e Responsiva:** Design elegante com paleta inspirada no pôr do sol do interior paulista, terra roxa e patrimônio indígena.
-- 🔊 **Leitura por Voz (Text-to-Speech):** O assistente fala as respostas em português brasileiro.
-- 📋 **Guia de Tópicos Rápidos:** Menu lateral interativo com acesso rápido aos principais assuntos:
-  - **Fundação (1929) e Luiz de Souza Leão**
-  - **Museu Histórico e Pedagógico Índia Vanuíre**
-  - **Distrito de Varpa (Colônia Letã de 1922)**
-  - **Ensino Superior: FADAP e UNESP**
-  - **Capital Nacional do Amendoim & Agropecuária**
-  - **Igreja Matriz de São Pedro & Praça da Bandeira**
-  - **Festas Populares: EXAPIT & Tupã Junina**
-  - **Roteiro Turístico de Fim de Semana**
+![Tupã IA](https://img.shields.io/badge/Estância%20Turística-Tupã%20SP-0284c7?style=for-the-badge)
+![Prefeitura Oficial](https://img.shields.io/badge/Dados-tupa.sp.gov.br-059669?style=for-the-badge)
+![Status](https://img.shields.io/badge/Status-Online-success?style=for-the-badge)
 
 ---
 
-## 🚀 Como Executar Localmente
+## 🌟 O que há de novo nesta versão:
 
-1. Clone o repositório ou baixe os arquivos:
-   ```bash
-   git clone https://github.com/Bieel312/Aula-Matilha.git
-   ```
-2. Dê um duplo clique no arquivo `index.html` para abrir diretamente no seu navegador preferido (Chrome, Edge, Firefox, Safari).
+### 1. 💬 Aba Dedicada: "Tire sua Dúvida" (Chat Livre)
+- Permite que qualquer pessoa digite e pergunte **livremente qualquer dúvida** sobre Tupã.
+- Sugestões dinâmicas de início rápido (chips interativos).
+- Respostas completas com formatação rica, botão para **copiar resposta** e **leitura por voz (áudio)**.
+- Painel lateral com ficha rápida da Estância e fatos curiosos.
 
----
+### 2. ❓ Aba de "Perguntas Programadas" (Guias & FAQ)
+- Acordeão categorizado com todas as dúvidas e respostas fundamentais sobre:
+  - **Turismo & Cultura:** Museu Índia Vanuíre, Solar Luiz de Souza Leão, Distrito de Varpa.
+  - **Serviços da Prefeitura:** Horários, endereço do Paço Municipal, UPA 24h, IPTU e certidões.
+  - **História & Origem:** Fundação em 1929 por Luiz de Souza Leão e a pacificadora Índia Vanuíre.
+  - **Educação Superior:** Tradição histórica da FADAP e cursos pioneiros da UNESP (Eng. de Biossistemas e Administração).
+  - **Economia:** Por que Tupã é a Capital Nacional do Amendoim e polo avícola.
+  - **Festas Tradicionais:** EXAPIT, Tupã Junina e festividades nos distritos.
+- Campo de **busca instantânea** para filtrar perguntas.
+- Botão em cada pergunta para migrar a dúvida diretamente para o chat!
 
-## 🌐 Como Ativar o Site Online (GitHub Pages)
+### 3. 🏺 Galeria de Pontos Turísticos Oficiais
+- Apresentação visual e detalhada dos cartões-postais de Tupã, com horários de visitação, endereços oficiais e botão "Perguntar no Chat".
 
-Você pode publicar este site gratuitamente para o mundo inteiro usando o **GitHub Pages**:
+### 4. 🏢 Serviços da Prefeitura & Telefones Úteis
+- Links diretos para os serviços digitais de **tupa.sp.gov.br** (IPTU, Nota Fiscal Eletrônica, Ouvidoria, Iluminação Pública, Diário Oficial).
+- Lista completa de telefones de emergência (SAMU 192, Bombeiros 193, Polícia 190, UPA 24h, Santa Casa, Defesa Civil 199, PABX da Prefeitura).
 
-1. Acesse o seu repositório no GitHub: [github.com/Bieel312/Aula-Matilha](https://github.com/Bieel312/Aula-Matilha).
-2. Clique na aba **Settings** (Configurações) no topo.
-3. No menu lateral esquerdo, clique em **Pages**.
-4. Em **Build and deployment** > **Branch**:
-   - Selecione a branch `main` e a pasta `/ (root)`.
-   - Clique em **Save**.
-5. Aguarde cerca de 1 minuto e seu site estará no ar no endereço:
-   👉 **`https://bieel312.github.io/Aula-Matilha/`**
-
----
-
-## 📁 Estrutura de Arquivos
-
-```
-├── index.html       # Estrutura visual do site e interface do Chatbot
-├── style.css        # Estilos modernos, responsividade e animações
-├── tupa_data.js     # Base de conhecimento detalhada sobre Tupã e prompt do sistema
-├── app.js           # Lógica do chatbot, motor NLP local e integração com IA
-├── jogo_da_velha.py # Jogo da velha em Python
-└── README.md        # Documentação do repositório
-```
+### 5. 🎨 Design Clean nas Cores Oficiais de Tupã
+- Cores inspiradas na Bandeira e no Brasão de Tupã: **Azul Real**, **Branco Puro**, detalhes em **Vermelho Vivo**, **Dourado do Sol** e **Verde da Estância**.
+- Layout responsivo para celular, tablet e computador.
+- Totalmente funcional offline e opção para conectar a chave do **Google Gemini** para IA generativa em tempo real.
 
 ---
 
-Desenvolvido para valorizar a história e as riquezas da **Estância Turística de Tupã**! 🏛️🌾
+## 🚀 Como Visualizar:
+
+1. **Online pelo GitHub Pages:**
+   👉 **[https://bieel312.github.io/Aula-Matilha/](https://bieel312.github.io/Aula-Matilha/)**
+
+2. **No seu computador:**
+   Basta dar um duplo clique no arquivo `index.html` em qualquer navegador.
+
+---
+
+Desenvolvido para valorizar a história, o patrimônio e os serviços da **Estância Turística de Tupã**! 🏛️🌾

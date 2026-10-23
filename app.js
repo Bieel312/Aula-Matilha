@@ -1,7 +1,6 @@
-// Aplicação Principal - Tupã IA Especialista
+// Aplicação Tupã IA - Oficial e Especializada
 
 // Estado da Aplicação
-let conversationHistory = [];
 let voiceEnabled = false;
 let geminiApiKey = localStorage.getItem("tupa_gemini_api_key") || "";
 
@@ -13,35 +12,140 @@ const btnSend = document.getElementById("btn-send");
 const btnToggleVoice = document.getElementById("btn-toggle-voice");
 const btnSettings = document.getElementById("btn-settings");
 const btnClear = document.getElementById("btn-clear");
-const btnAbout = document.getElementById("btn-about");
-const topicsList = document.getElementById("topics-list");
 const curiosityText = document.getElementById("curiosity-text");
 const modelStatusPill = document.getElementById("model-status-pill");
 const modelStatusText = document.getElementById("model-status-text");
+const faqContainer = document.getElementById("faq-container");
+const servicesContainer = document.getElementById("services-container");
+const phonesContainer = document.getElementById("phones-container");
 
 // Inicialização
 document.addEventListener("DOMContentLoaded", () => {
-  renderTopics();
+  renderFaq();
+  renderServices();
+  renderPhones();
   updateCuriosity();
   updateModelStatus();
   setupTextareaAutoResize();
 
-  // Atualizar curiosidade periodicamente
   setInterval(updateCuriosity, 20000);
 });
 
-// Renderizar Tópicos na Barra Lateral
-function renderTopics() {
-  if (!topicsList || !TUPA_KNOWLEDGE_BASE) return;
+// Navegação entre Abas
+function switchTab(tabId) {
+  // Atualizar botões
+  document.querySelectorAll(".tab-btn").forEach(btn => {
+    btn.classList.toggle("active", btn.getAttribute("data-tab") === tabId);
+  });
 
-  topicsList.innerHTML = TUPA_KNOWLEDGE_BASE.categorias.map(cat => `
-    <button class="topic-btn" onclick="askTopic('${cat.id}')">
-      <span class="topic-icon">${cat.icone}</span>
-      <div class="topic-info">
-        <h3>${cat.titulo}</h3>
-        <p>${cat.resumo}</p>
+  // Atualizar painéis
+  document.querySelectorAll(".tab-panel").forEach(panel => {
+    panel.classList.toggle("active", panel.id === tabId);
+  });
+
+  // Se for a aba de chat, focar no input
+  if (tabId === "tab-chat" && chatInput) {
+    chatInput.focus();
+  }
+}
+
+// Renderizar FAQ (Perguntas Frequentes Programadas)
+function renderFaq() {
+  if (!faqContainer || !TUPA_KNOWLEDGE_BASE) return;
+
+  faqContainer.innerHTML = TUPA_KNOWLEDGE_BASE.categorias.map(cat => `
+    <div class="faq-category-card" data-category="${cat.id}">
+      <div class="faq-cat-title">
+        <span>${cat.icone}</span>
+        <span>${cat.titulo}</span>
       </div>
-    </button>
+      <div class="faq-items-list">
+        ${cat.itens.map((item, index) => `
+          <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaqAnswer('${cat.id}-${index}')">
+              <span>${item.pergunta}</span>
+              <span id="faq-icon-${cat.id}-${index}">▼</span>
+            </div>
+            <div class="faq-answer" id="faq-ans-${cat.id}-${index}">
+              <p>${formatMarkdown(item.resposta)}</p>
+              <button class="btn-msg-action" style="margin-top: 0.5rem;" onclick="askFaqQuestion('${escapeQuotes(item.pergunta)}')">
+                💬 Conversar sobre isso no Chat
+              </button>
+            </div>
+          </div>
+        `).join("")}
+      </div>
+    </div>
+  `).join("");
+}
+
+// Abrir/Fechar resposta no FAQ
+function toggleFaqAnswer(id) {
+  const ans = document.getElementById(`faq-ans-${id}`);
+  const icon = document.getElementById(`faq-icon-${id}`);
+  if (!ans) return;
+
+  const isOpen = ans.classList.contains("show");
+  if (isOpen) {
+    ans.classList.remove("show");
+    if (icon) icon.textContent = "▼";
+  } else {
+    ans.classList.add("show");
+    if (icon) icon.textContent = "▲";
+  }
+}
+
+// Filtrar FAQ por texto digitado
+function filterFaq() {
+  const search = normalizeText(document.getElementById("faq-search-input").value);
+  const cards = document.querySelectorAll(".faq-category-card");
+
+  cards.forEach(card => {
+    const items = card.querySelectorAll(".faq-item");
+    let hasVisible = false;
+
+    items.forEach(item => {
+      const text = normalizeText(item.innerText);
+      if (!search || text.includes(search)) {
+        item.style.display = "block";
+        hasVisible = true;
+      } else {
+        item.style.display = "none";
+      }
+    });
+
+    card.style.display = hasVisible ? "block" : "none";
+  });
+}
+
+// Renderizar Serviços do Cidadão (tupa.sp.gov.br)
+function renderServices() {
+  if (!servicesContainer || !TUPA_KNOWLEDGE_BASE) return;
+
+  servicesContainer.innerHTML = TUPA_KNOWLEDGE_BASE.servicosCidadao.map(serv => `
+    <div class="service-card">
+      <div class="service-icon">${serv.icone}</div>
+      <h4>${serv.nome}</h4>
+      <p>${serv.descricao}</p>
+      <a href="${serv.link}" target="_blank" rel="noopener" class="btn-service-link">
+        Acessar no Portal Oficial ↗
+      </a>
+    </div>
+  `).join("");
+}
+
+// Renderizar Telefones Úteis
+function renderPhones() {
+  if (!phonesContainer || !TUPA_KNOWLEDGE_BASE) return;
+
+  phonesContainer.innerHTML = TUPA_KNOWLEDGE_BASE.telefonesUteis.map(item => `
+    <div class="phone-item">
+      <div class="phone-info">
+        <strong>${item.orgao}</strong>
+        <small>${item.desc}</small>
+      </div>
+      <div class="phone-num">${item.numero}</div>
+    </div>
   `).join("");
 }
 
@@ -56,15 +160,15 @@ function updateCuriosity() {
 // Atualizar status do modelo
 function updateModelStatus() {
   if (geminiApiKey) {
-    modelStatusText.textContent = "Gemini IA Online";
-    modelStatusPill.style.borderColor = "#60a5fa";
+    modelStatusText.textContent = "Gemini Online";
+    modelStatusPill.style.borderColor = "#93c5fd";
     modelStatusPill.style.background = "#eff6ff";
     modelStatusPill.style.color = "#1d4ed8";
   } else {
-    modelStatusText.textContent = "Base Local Ativa";
-    modelStatusPill.style.borderColor = "#a7f3d0";
-    modelStatusPill.style.background = "#ecfdf5";
-    modelStatusPill.style.color = "#065f46";
+    modelStatusText.textContent = "Base Oficial Ativa";
+    modelStatusPill.style.borderColor = "var(--border-highlight)";
+    modelStatusPill.style.background = "var(--tupa-blue-subtle)";
+    modelStatusPill.style.color = "var(--tupa-blue)";
   }
 }
 
@@ -98,21 +202,23 @@ async function handleFormSubmit(event) {
 
 // Fazer pergunta direta via clique
 function askQuestion(questionText) {
+  switchTab("tab-chat");
   processUserMessage(questionText);
 }
 
-// Consultar tema completo da barra lateral
-function askTopic(topicId) {
-  const cat = TUPA_KNOWLEDGE_BASE.categorias.find(c => c.id === topicId);
-  if (!cat) return;
+function askFaqQuestion(qText) {
+  switchTab("tab-chat");
+  processUserMessage(qText);
+}
 
-  const prompt = `Conte-me tudo sobre ${cat.titulo} em Tupã`;
-  processUserMessage(prompt);
+function askSpot(spotPrompt) {
+  switchTab("tab-chat");
+  processUserMessage(spotPrompt);
 }
 
 // Processar a Mensagem do Usuário
 async function processUserMessage(userText) {
-  // Adicionar mensagem do usuário na tela
+  // Inserir mensagem do usuário
   appendMessage("user", userText);
   playChime(440, 0.05);
 
@@ -130,17 +236,17 @@ async function processUserMessage(userText) {
       botReply = generateLocalResponse(userText);
     }
   } else {
-    // Simular tempo sutil de raciocínio natural
+    // Leve atraso para sensação natural de processamento
     await new Promise(r => setTimeout(r, 450));
     botReply = generateLocalResponse(userText);
   }
 
-  // Remover indicador e adicionar resposta do bot
+  // Remover indicador e exibir resposta
   typingIndicator.remove();
   appendMessage("bot", botReply);
   playChime(660, 0.08);
 
-  // Leitura por voz se ativada
+  // Leitura por voz se habilitada
   if (voiceEnabled) {
     speakText(botReply);
   }
@@ -151,65 +257,92 @@ function generateLocalResponse(query) {
   const qClean = normalizeText(query);
   const kb = TUPA_KNOWLEDGE_BASE;
 
-  // 1. Saudações e Apresentação
+  // 1. Saudações
   if (isGreeting(qClean)) {
-    return `Olá! Sou o **Tupã IA**, especialista na encantadora **Estância Turística de Tupã (SP)**!\n\nPosso te contar tudo sobre nossa história, a fundação por Luiz de Souza Leão em 1929, o Museu Índia Vanuíre, a colônia letã de Varpa, faculdades como FADAP e UNESP, nossa força como Capital do Amendoim e muito mais.\n\nO que gostaria de saber hoje?`;
+    return `Olá! Sou o **Tupã IA**, assistente virtual especializado na **Estância Turística de Tupã (SP)**!\n\nEstou abastecido com informações oficiais da prefeitura (**tupa.sp.gov.br**), história de 1929, dados do Museu Índia Vanuíre, da colônia letã de Varpa, faculdades (FADAP e UNESP), produção de amendoim e serviços municipais.\n\nQual é a sua dúvida hoje?`;
   }
 
-  // 2. Roteiro Turístico de Final de Semana
-  if (qClean.includes("roteiro") || (qClean.includes("fim de semana") && qClean.includes("tupa")) || qClean.includes("o que fazer")) {
-    return `### 🗺️ Roteiro Perfeito de Fim de Semana em Tupã (SP):\n\n` +
-      `**Sábado: História e Tradição no Centro**\n` +
-      `- **Manhã:** Visite o renomado **Museu Histórico e Pedagógico Índia Vanuíre**, um dos mais importantes do Brasil em cultura indígena.\n` +
-      `- **Almoço:** Experimente a gastronomia local no centro e aproveite para degustar doces tradicionais de amendoim.\n` +
-      `- **Tarde:** Passeie pelo **Solar Luiz de Souza Leão** e caminhe pela ampla e arborizada **Praça da Bandeira**, admirando a **Igreja Matriz de São Pedro** e sua fonte luminosa.\n\n` +
-      `**Domingo: Cultura Europeia e Natureza em Varpa**\n` +
-      `- **Manhã:** Vá até o **Distrito de Varpa** (imigração letã de 1922) e visite o **Museu dos Pioneiros 'Janis Erdbergs'**.\n` +
-      `- **Almoço:** Saboreie queijos artesanais, pratos típicos e defumados letones em Varpa.\n` +
-      `- **Tarde:** Relaxe na natureza na **Cachoeira do Palma** ou dê um mergulho no **Balneário Sete de Setembro**!`;
+  // 2. Telefones, Emergência e Prefeitura Geral
+  if (qClean.includes("telefone") || qClean.includes("contato") || qClean.includes("emergencia") || qClean.includes("upa") || qClean.includes("samu") || qClean.includes("bombeiro")) {
+    return `### 📞 Telefones Úteis e de Emergência em Tupã:\n\n` +
+      `- **Prefeitura Municipal (PABX Geral):** (14) 3404-1000\n` +
+      `- **UPA 24 Horas (Pronto Atendimento):** (14) 3404-2200 (Rua Guaranis, 1822)\n` +
+      `- **Santa Casa de Misericórdia:** (14) 3404-5555 (Rua Cherentes, 599)\n` +
+      `- **SAMU:** 192\n` +
+      `- **Corpo de Bombeiros:** 193\n` +
+      `- **Polícia Militar:** 190\n` +
+      `- **Defesa Civil:** 199\n` +
+      `- **Museu Índia Vanuíre:** (14) 3491-2333\n` +
+      `- **Secretaria de Turismo:** (14) 3491-5013\n\n` +
+      `Você também pode conferir todos os serviços municipais na aba **Serviços da Prefeitura & Telefones**.`;
   }
 
-  // 3. FADAP e Ensino Superior
+  // 3. IPTU, Certidões e Tributos
+  if (qClean.includes("iptu") || qClean.includes("certidao") || qClean.includes("tributo") || qClean.includes("nota fiscal") || qClean.includes("nfs")) {
+    const item = kb.categorias.find(c => c.id === "prefeitura").itens.find(i => i.palavrasChave.includes("iptu"));
+    return item ? item.resposta : `Para serviços de IPTU, certidões e notas fiscais de Tupã, acesse o portal oficial da prefeitura em **www.tupa.sp.gov.br** no menu Cidadão, ou dirija-se ao Paço Municipal na Praça da Bandeira, 800 (das 07h30 às 13h30).`;
+  }
+
+  // 4. Endereço e Horário da Prefeitura
+  if (qClean.includes("prefeitura") && (qClean.includes("horario") || qClean.includes("endereco") || qClean.includes("onde fica") || qClean.includes("aberta"))) {
+    const item = kb.categorias.find(c => c.id === "prefeitura").itens.find(i => i.palavrasChave.includes("endereco prefeitura"));
+    return item.resposta;
+  }
+
+  // 5. Roteiro Turístico de Final de Semana
+  if (qClean.includes("roteiro") || (qClean.includes("fim de semana") && qClean.includes("tupa")) || qClean.includes("o que fazer") || qClean.includes("turismo")) {
+    return `### 🗺️ Roteiro Turístico Oficial de Fim de Semana em Tupã (SP):\n\n` +
+      `**Sábado: Patrimônio Histórico no Centro**\n` +
+      `- **Manhã:** Conheça o célebre **Museu Histórico e Pedagógico Índia Vanuíre** (Rua Coroados, 521), referência nacional em cultura e etnografia dos povos indígenas Kaingang e Krenak.\n` +
+      `- **Almoço:** Prove a gastronomia local no centro e deguste doces artesanais de amendoim.\n` +
+      `- **Tarde:** Visite o casarão histórico **Solar Luiz de Souza Leão** e passeie pela arborizada **Praça da Bandeira**, admirando a **Igreja Matriz de São Pedro** e sua fonte luminosa.\n\n` +
+      `**Domingo: Cultura Europeia e Ecoturismo em Varpa**\n` +
+      `- **Manhã:** Vá até o **Distrito de Varpa** (colônia letã de 1922) e visite o **Museu dos Pioneiros 'Janis Erdbergs'**.\n` +
+      `- **Almoço:** Saboreie os queijos tradicionais, pão de centeio, mel e linguiças defumadas letonas.\n` +
+      `- **Tarde:** Refresque-se na natureza na **Cachoeira do Palma** ou aproveite o **Balneário Sete de Setembro**!`;
+  }
+
+  // 6. FADAP e Universidades
   if (qClean.includes("fadap") || qClean.includes("fap") || qClean.includes("faculdade da alta paulista")) {
     const item = kb.categorias.find(c => c.id === "educacao").itens.find(i => i.palavrasChave.includes("fadap"));
-    return item ? item.resposta : "A FADAP (Faculdades da Alta Paulista) é uma tradicional instituição de ensino superior de Tupã, formadora de inúmeros líderes e profissionais de destaque na região.";
+    return item ? item.resposta : "A FADAP (Faculdades da Alta Paulista) é uma tradicional instituição pioneira no ensino superior em Tupã, formadora de inúmeros juízes, advogados, administradores e líderes regionais.";
   }
 
-  // 4. UNESP
+  // 7. UNESP
   if (qClean.includes("unesp") || qClean.includes("biosistemas") || qClean.includes("fce")) {
     const item = kb.categorias.find(c => c.id === "educacao").itens.find(i => i.palavrasChave.includes("unesp"));
-    return item ? item.resposta : "O campus da UNESP em Tupã (FCE) destaca-se pelos cursos de ponta em Engenharia de Biossistemas e Administração.";
+    return item ? item.resposta : "A UNESP Campus Tupã (Faculdade de Ciências e Engenharia - FCE) oferece cursos de graduação e pós-graduação de referência em Engenharia de Biossistemas e Administração.";
   }
 
-  // 5. Museu Índia Vanuíre
+  // 8. Museu Índia Vanuíre
   if (qClean.includes("vanuire") || qClean.includes("museu")) {
     const cat = kb.categorias.find(c => c.id === "turismo");
     const item = cat.itens.find(i => i.palavrasChave.includes("museu india vanuire"));
     return item.resposta;
   }
 
-  // 6. Varpa e Letônia
+  // 9. Varpa e Letônia
   if (qClean.includes("varpa") || qClean.includes("letonia") || qClean.includes("letos") || qClean.includes("erdbergs")) {
     const cat = kb.categorias.find(c => c.id === "turismo");
     const item = cat.itens.find(i => i.palavrasChave.includes("varpa"));
     return item.resposta;
   }
 
-  // 7. Amendoim / Economia
-  if (qClean.includes("amendoim") || qClean.includes("capital do amendoim") || qClean.includes("industria")) {
+  // 10. Amendoim / Economia
+  if (qClean.includes("amendoim") || qClean.includes("capital do amendoim") || qClean.includes("economia")) {
     const cat = kb.categorias.find(c => c.id === "economia");
     const item = cat.itens.find(i => i.palavrasChave.includes("amendoim"));
     return item.resposta;
   }
 
-  // 8. Fundação / História / Luiz de Souza Leão
+  // 11. Fundação e Luiz de Souza Leão
   if (qClean.includes("fundad") || qClean.includes("luiz de souza") || qClean.includes("1929") || qClean.includes("historia")) {
     const cat = kb.categorias.find(c => c.id === "historia");
     const item = cat.itens.find(i => i.palavrasChave.includes("fundacao"));
     return item.resposta;
   }
 
-  // 9. Pesquisa semântica por pontuação em toda a base de dados
+  // 12. Busca Semântica em Toda a Base
   let bestMatch = null;
   let highestScore = 0;
 
@@ -217,14 +350,12 @@ function generateLocalResponse(query) {
     for (const item of cat.itens) {
       let score = 0;
       
-      // Pontua por palavras-chave
       for (const kw of item.palavrasChave) {
         if (qClean.includes(normalizeText(kw))) {
           score += 3;
         }
       }
 
-      // Pontua por termos da pergunta
       const pClean = normalizeText(item.pergunta);
       const queryWords = qClean.split(/\s+/).filter(w => w.length > 3);
       for (const w of queryWords) {
@@ -243,17 +374,18 @@ function generateLocalResponse(query) {
     return bestMatch.resposta;
   }
 
-  // 10. Resposta sintética rica de visão geral quando a dúvida for aberta
-  return `Tupã é um município fascinante do interior paulista! Aqui estão alguns pontos fundamentais para enriquecer sua pesquisa:\n\n` +
-    `- **Fundação:** 12 de outubro de 1929 por Luiz de Souza Leão.\n` +
-    `- **Patrimônio Cultural:** O renomado **Museu Histórico e Pedagógico Índia Vanuíre** e o casarão histórico **Solar Luiz de Souza Leão**.\n` +
-    `- **Tradição Europeia:** O charmoso **Distrito de Varpa**, berço da imigração letã no Brasil.\n` +
-    `- **Educação de Ponta:** Instituições respeitadas como a **FADAP** e a **UNESP (Campus Tupã)**.\n` +
-    `- **Economia:** Conhecida como a **Capital Nacional do Amendoim** e forte pólo avícola e sucroalcooleiro.\n\n` +
-    `Você gostaria de aprofundar sobre algum destes assuntos específicos?`;
+  // 13. Resposta Institucional Completa
+  return `A **Estância Turística de Tupã** é rica em história, cultura e serviços! Aqui está um panorama dos dados oficiais:\n\n` +
+    `- **Fundação:** 12 de outubro de 1929 pelo desbravador Luiz de Souza Leão.\n` +
+    `- **Sede Administrativa:** Praça da Bandeira, 800 - Telefone: (14) 3404-1000 - www.tupa.sp.gov.br.\n` +
+    `- **Patrimônio Cultural:** O **Museu Histórico e Pedagógico Índia Vanuíre** e o tombado **Solar Luiz de Souza Leão**.\n` +
+    `- **Tradição Letã:** O **Distrito de Varpa** e o Museu dos Pioneiros 'Janis Erdbergs'.\n` +
+    `- **Ensino Superior:** A prestigiada **FADAP** e a **UNESP (FCE - Tupã)**.\n` +
+    `- **Economia:** Liderança como **Capital Nacional do Amendoim** e forte produção avícola.\n\n` +
+    `Se quiser saber algo mais específico sobre qualquer um desses temas, basta digitar sua pergunta!`;
 }
 
-// Normalizador de texto para comparação
+// Normalizador de texto
 function normalizeText(text) {
   return (text || "")
     .toLowerCase()
@@ -286,7 +418,6 @@ function appendMessage(sender, text) {
 
   bubbleWrapper.appendChild(bubble);
 
-  // Ações de mensagem para o bot (Copiar e Ouvir)
   if (sender === "bot") {
     const actions = document.createElement("div");
     actions.className = "message-actions";
@@ -329,20 +460,17 @@ function showTypingIndicator() {
   return msgDiv;
 }
 
-// Formatar Markdown simples para HTML seguro
+// Formatador Markdown simples
 function formatMarkdown(text) {
   if (!text) return "";
   let html = text
-    .replace(/^### (.*$)/gim, '<h4 style="margin: 0.3rem 0; font-weight:700;">$1</h4>')
-    .replace(/^## (.*$)/gim, '<h3 style="margin: 0.4rem 0; font-weight:700;">$1</h3>')
+    .replace(/^### (.*$)/gim, '<h4 style="margin: 0.35rem 0; font-weight:700; color:var(--tupa-blue-dark);">$1</h4>')
+    .replace(/^## (.*$)/gim, '<h3 style="margin: 0.45rem 0; font-weight:700; color:var(--tupa-blue-dark);">$1</h3>')
     .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
     .replace(/\*(.*?)\*/g, '<em>$1</em>')
     .replace(/^- (.*$)/gim, '<li>$1</li>');
 
-  // Tratar listas
   html = html.replace(/(<li>[\s\S]*?<\/li>)/gm, '<ul>$1</ul>');
-  
-  // Tratar quebras de linha normais
   html = html.replace(/\n\n/g, '<br><br>');
   html = html.replace(/\n/g, '<br>');
 
@@ -356,19 +484,16 @@ function escapeQuotes(str) {
     .replace(/\n/g, " ");
 }
 
-// Copiar para área de transferência
 function copyToClipboard(text) {
   navigator.clipboard.writeText(text).then(() => {
     alert("Mensagem copiada para a área de transferência!");
   });
 }
 
-// Síntese de Voz (Text-to-Speech)
 function speakText(text) {
   if (!('speechSynthesis' in window)) return;
   window.speechSynthesis.cancel();
 
-  // Limpar marcações HTML/markdown para leitura limpa
   const clean = text
     .replace(/<[^>]*>/g, '')
     .replace(/[*#_]/g, '')
@@ -380,15 +505,14 @@ function speakText(text) {
   window.speechSynthesis.speak(utterance);
 }
 
-// Alternar Voz
+// Botão de Áudio
 btnToggleVoice.addEventListener("click", () => {
   voiceEnabled = !voiceEnabled;
-  btnToggleVoice.style.color = voiceEnabled ? "var(--primary)" : "var(--text-muted)";
-  btnToggleVoice.style.background = voiceEnabled ? "var(--primary-subtle)" : "var(--bg-card)";
-  alert(voiceEnabled ? "Leitura por voz ativada!" : "Leitura por voz desativada.");
+  btnToggleVoice.style.color = voiceEnabled ? "var(--tupa-blue)" : "var(--text-secondary)";
+  btnToggleVoice.style.background = voiceEnabled ? "var(--tupa-blue-subtle)" : "white";
+  alert(voiceEnabled ? "Leitura por voz ativada! O assistente lerá as respostas." : "Leitura por voz desativada.");
 });
 
-// Sintetizar som suave de feedback (Web Audio API)
 function playChime(freq, duration) {
   try {
     const ctx = new (window.AudioContext || window.webkitAudioContext)();
@@ -396,37 +520,29 @@ function playChime(freq, duration) {
     const gain = ctx.createGain();
     osc.frequency.value = freq;
     osc.type = "sine";
-    gain.gain.setValueAtTime(0.05, ctx.currentTime);
+    gain.gain.setValueAtTime(0.04, ctx.currentTime);
     gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + duration);
     osc.connect(gain);
     gain.connect(ctx.destination);
     osc.start();
     osc.stop(ctx.currentTime + duration);
-  } catch (e) {
-    // Silencioso se navegador bloquear áudio automático
-  }
+  } catch (e) {}
 }
 
-// Limpar Conversa
 btnClear.addEventListener("click", () => {
-  if (confirm("Deseja limpar o histórico da conversa?")) {
+  if (confirm("Deseja reiniciar a conversa com o Tupã IA?")) {
     chatMessages.innerHTML = `
-      <div class="welcome-hero">
+      <div class="welcome-box">
         <h2>Conversa Reiniciada ✨</h2>
-        <p>Pergunte-me qualquer coisa sobre a história, distritos, museus, faculdades e economia de Tupã (SP)!</p>
+        <p>Estou pronto para tirar qualquer dúvida sobre a Estância Turística de Tupã (SP) e os serviços da Prefeitura!</p>
       </div>
     `;
   }
 });
 
-// Modal de Configurações
 btnSettings.addEventListener("click", () => {
   document.getElementById("gemini-api-key").value = geminiApiKey;
   openModal("modal-settings");
-});
-
-btnAbout.addEventListener("click", () => {
-  openModal("modal-about");
 });
 
 function openModal(id) {
@@ -442,10 +558,10 @@ function saveApiKey() {
   geminiApiKey = val;
   if (val) {
     localStorage.setItem("tupa_gemini_api_key", val);
-    alert("Chave Gemini salva! Agora o Tupã IA usará o modelo generativo com todo o contexto de Tupã.");
+    alert("Chave Google Gemini salva! O assistente agora utilizará o modelo generativo com o contexto de Tupã.");
   } else {
     localStorage.removeItem("tupa_gemini_api_key");
-    alert("Chave removida. Usando o motor de conhecimento local.");
+    alert("Chave removida. Usando a base oficial local.");
   }
   updateModelStatus();
   closeModal("modal-settings");
@@ -460,7 +576,6 @@ function clearApiKey() {
   closeModal("modal-settings");
 }
 
-// Chamada à API do Google Gemini (se configurada)
 async function callGeminiAPI(prompt) {
   const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiApiKey}`;
 

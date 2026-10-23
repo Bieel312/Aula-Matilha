@@ -1,179 +1,303 @@
-// Base de Conhecimento Especializada sobre a Estância Turística de Tupã - SP
+// Base de Dados e Conhecimento Oficial - Estância Turística de Tupã (SP)
+// Fonte: Portal Oficial da Prefeitura Municipal (tupa.sp.gov.br) e Órgãos de Turismo
+
 const TUPA_KNOWLEDGE_BASE = {
-  cidade: {
-    nome: "Estância Turística de Tupã",
-    estado: "São Paulo",
-    regiao: "Alta Paulista / Centro-Oeste Paulista",
-    gentilico: "Tupaense",
+  institucional: {
+    nome: "Prefeitura da Estância Turística de Tupã",
+    tituloOficial: "Município de Interesse Turístico e Estância Turística de São Paulo",
+    fundacao: "12 de Outubro de 1929",
     aniversario: "12 de Outubro",
-    anoFundacao: 1929,
     fundador: "Luiz de Souza Leão",
-    populacaoAproximada: "Aprox. 64.000 a 65.000 habitantes",
+    gentilico: "Tupaense",
+    padroeiro: "São Pedro (comemorado em 29 de junho)",
+    populacao: "Aprox. 64.000 a 65.000 habitantes",
+    areaTerritorial: "628,51 km²",
     altitude: "508 metros",
-    clima: "Tropical de altitude (verões quentes e chuvosos, invernos amenos e secos)",
-    ddd: "14",
-    cepGeral: "17600-000",
-    tituloTuristico: "Estância Turística do Estado de São Paulo"
+    clima: "Tropical de altitude com verões amenos/chuvosos e invernos secos",
+    regiao: "Alta Paulista (10ª Região Administrativa - Oeste do Estado de SP)",
+    siteOficial: "https://www.tupa.sp.gov.br",
+    portalTurismo: "https://turismo.tupa.sp.gov.br",
+    enderecoSede: "Praça da Bandeira, nº 800 - Centro - CEP 17600-900 - Tupã/SP",
+    telefonePABX: "(14) 3404-1000",
+    horarioAtendimento: "Segunda a sexta-feira, das 07h30 às 13h30 (atendimento ao público) e das 07h30 às 17h00 (expediente administrativo)",
+    simbolos: {
+      coresBandeira: "Azul (lealdade e céu da Alta Paulista), Branco (paz e pureza) e Vermelho (coragem e pioneirismo). O brasão carrega o sol poente dourado e as raízes indígenas."
+    }
   },
+
+  telefonesUteis: [
+    { orgao: "Prefeitura Municipal (PABX Geral)", numero: "(14) 3404-1000", desc: "Praça da Bandeira, 800" },
+    { orgao: "Secretaria Municipal de Turismo", numero: "(14) 3491-5013", desc: "Informações turísticas e CAT" },
+    { orgao: "Secretaria Municipal de Cultura", numero: "(14) 3491-3015", desc: "Eventos, teatros e museus municipais" },
+    { orgao: "Museu Histórico Índia Vanuíre", numero: "(14) 3491-2333", desc: "Rua Coroados, 521 - Centro" },
+    { orgao: "Solar Luiz de Souza Leão", numero: "(14) 3496-4122", desc: "Rua Caingangs, 600 - Centro Histórico" },
+    { orgao: "UPA 24h (Pronto Atendimento)", numero: "(14) 3404-2200", desc: "Urgência e emergência médica 24 horas" },
+    { orgao: "Santa Casa de Misericórdia de Tupã", numero: "(14) 3404-5555", desc: "Hospital Geral de Alta Complexidade" },
+    { orgao: "Poupatempo Tupã", numero: "0800 772 3633", desc: "Av. Brasil, Centro" },
+    { orgao: "SAMU", numero: "192", desc: "Socorro médico de emergência" },
+    { orgao: "Corpo de Bombeiros", numero: "193", desc: "Resgate e combate a incêndios" },
+    { orgao: "Polícia Militar", numero: "190", desc: "Segurança pública" },
+    { orgao: "Defesa Civil de Tupã", numero: "199", desc: "Emergências climáticas e prevenção" }
+  ],
+
+  servicosCidadao: [
+    {
+      nome: "IPTU e Tributos Online",
+      descricao: "Emissão de 2ª via de IPTU, certidões negativas de débitos e parcelamento de taxas pelo portal oficial.",
+      link: "https://www.tupa.sp.gov.br",
+      icone: "💳"
+    },
+    {
+      nome: "Nota Fiscal de Serviços Eletrônica (NFS-e)",
+      descricao: "Emissão e autenticação de notas fiscais eletrônicas para prestadores de serviços e empresas de Tupã.",
+      link: "https://www.tupa.sp.gov.br",
+      icone: "📄"
+    },
+    {
+      nome: "Ouvidoria Municipal & e-SIC",
+      descricao: "Canal aberto para sugestões, solicitações de serviços, elogios, reclamações e pedidos da Lei de Acesso à Informação.",
+      link: "https://www.tupa.sp.gov.br",
+      icone: "📢"
+    },
+    {
+      nome: "Iluminação Pública e Manutenção",
+      descricao: "Solicitação de reparo de lâmpadas queimadas e serviços de limpeza pública em bairros e praças.",
+      link: "https://www.tupa.sp.gov.br",
+      icone: "💡"
+    },
+    {
+      nome: "Agendamentos de Saúde e Medicamentos",
+      descricao: "Informações sobre Farmácia Municipal, vacinação nas Unidades Básicas de Saúde (UBS/ESF) e agendamento de consultas.",
+      link: "https://www.tupa.sp.gov.br",
+      icone: "🏥"
+    },
+    {
+      nome: "Diário Oficial Eletrônico",
+      descricao: "Publicação diária de leis, decretos, licitações, concursos e editais da Prefeitura e Câmara de Tupã.",
+      link: "https://www.tupa.sp.gov.br",
+      icone: "📰"
+    }
+  ],
 
   categorias: [
     {
-      id: "historia",
-      titulo: "História e Origem",
-      icone: "🏛️",
-      resumo: "Fundação em 1929 por Luiz de Souza Leão e a homenagem aos povos originários.",
+      id: "turismo",
+      titulo: "Pontos Turísticos Oficiais",
+      icone: "🏺",
+      badge: "Estância Turística",
+      resumo: "Conheça o Museu Índia Vanuíre, Solar Luiz de Souza Leão, Praça da Bandeira e Varpa.",
       itens: [
         {
-          pergunta: "Como e quando Tupã foi fundada?",
-          resposta: "Tupã foi fundada no dia **12 de outubro de 1929** pelo desbravador e fazendeiro **Luiz de Souza Leão**. Ele adquiriu terras no espigão entre os rios Feio (Aguapeí) e do Peixe, na região da Alta Paulista, planejando o traçado urbano com ruas largas e arborizadas, algo moderno e visionário para a época.",
-          palavrasChave: ["fundacao", "fundador", "luiz de souza leao", "1929", "12 de outubro", "origem", "historia"]
+          pergunta: "Quais são os principais pontos turísticos de Tupã?",
+          resposta: "Como Estância Turística oficial de SP, os principais cartões-postais de Tupã incluem:\n\n" +
+            "1. **Museu Histórico e Pedagógico Índia Vanuíre:** Referência nacional em etnologia e cultura indígena (Rua Coroados, 521).\n" +
+            "2. **Solar Luiz de Souza Leão:** Mansão histórica do fundador preservada com móveis dos anos 30 e bosque centenário (Rua Caingangs, 600).\n" +
+            "3. **Distrito de Varpa (Caminhos da Letônia):** Colônia europeia letona de 1922 com o Museu Janis Erdbergs, artesanato e gastronomia.\n" +
+            "4. **Praça da Bandeira e Igreja Matriz de São Pedro:** O coração da cidade com fonte luminosa, concha acústica e obelisco cívico.\n" +
+            "5. **Parques e Lazer Aquático:** Eco Thermas Tupã, Recanto das Águas e o Balneário Sete de Setembro em Varpa.",
+          palavrasChave: ["turismo", "pontos turisticos", "o que visitar", "passeios", "atracoes", "lugares para conhecer", "roteiro"]
         },
         {
-          pergunta: "Qual o significado do nome Tupã?",
-          resposta: "O nome **Tupã** é de origem Tupi-Guarani e significa o **Deus do Trovão** ou o Ser Supremo Criador na cosmologia indígena. O fundador escolheu esse nome em profundo respeito e homenagem aos povos indígenas (como os Kaingang e Krenak) que habitavam secularmente as florestas da região.",
-          palavrasChave: ["significado", "nome", "tupa", "tupi", "deus", "origem do nome", "trovao"]
+          pergunta: "Como visitar o Museu Índia Vanuíre (horários e acervo)?",
+          resposta: "O **Museu Histórico e Pedagógico Índia Vanuíre** fica na **Rua Coroados, 521 - Centro de Tupã**.\n\n" +
+            "- **Funcionamento:** Aberto de terça a domingo, das 09h às 18h (às quintas até 20h).\n" +
+            "- **Entrada:** Gratuita para todos os públicos.\n" +
+            "- **Destaque:** Abriga mais de 38.000 peças etnográficas das etnias Kaingang, Krenak, Terena e Guarani, além do acervo histórico dos pioneiros paulistas. É administrado em parceria com a ACAM Portinari e o Governo do Estado.",
+          palavrasChave: ["museu india vanuire", "museu", "horario museu", "endereco museu", "acervo indigena", "vanuire"]
+        },
+        {
+          pergunta: "O que encontrar no Solar Luiz de Souza Leão?",
+          resposta: "O **Solar Luiz de Souza Leão** (Rua Caingangs, 600) foi a residência oficial do fundador de Tupã, Luiz de Souza Leão.\n\n" +
+            "- É tombado pelo **CONDEPHAAT** como Patrimônio Histórico Estadual.\n" +
+            "- Possui arquitetura nobre com móveis originais, documentos históricos do nascimento de Tupã e um bosque de árvores nobres preservado no coração da cidade.\n" +
+            "- A visitação é gratuita e guiada.",
+          palavrasChave: ["solar", "solar luiz de souza leao", "casa do fundador", "patrimonio", "visitar solar"]
+        },
+        {
+          pergunta: "O que fazer no Distrito de Varpa e Circuito Caminhos da Letônia?",
+          resposta: "O **Distrito de Varpa**, fundado em 1922 por imigrantes da Letônia, oferece uma imersão cultural única no Brasil:\n\n" +
+            "- **Museu dos Pioneiros 'Janis Erdbergs':** Antiga igreja batista em madeira rústica com ferramentas, roupas e livros dos pioneiros letões.\n" +
+            "- **Gastronomia Típica:** Pães de centeio, queijo de caraway, linguiças defumadas artesanais, mel puro e biscoitos natalinos de gengibre.\n" +
+            "- **Ecoturismo:** Cachoeira do Palma e o Balneário Sete de Setembro com áreas de banho e lazer.",
+          palavrasChave: ["varpa", "distrito de varpa", "letonia", "letos", "caminhos da letonia", "museu dos pioneiros", "cachoeira do palma"]
+        }
+      ]
+    },
+
+    {
+      id: "prefeitura",
+      titulo: "Serviços da Prefeitura & Cidade",
+      icone: "🏛️",
+      badge: "Prefeitura de Tupã",
+      resumo: "Endereços, telefones, horários, UPA, IPTU, Poupatempo e certidões.",
+      itens: [
+        {
+          pergunta: "Qual o endereço, telefone e horário da Prefeitura de Tupã?",
+          resposta: "Dados oficiais da Prefeitura Municipal de Tupã:\n\n" +
+            "- **Endereço:** Praça da Bandeira, nº 800 - Centro - CEP 17600-900.\n" +
+            "- **Telefone PABX Geral:** (14) 3404-1000.\n" +
+            "- **Horário de Atendimento ao Público:** Segunda a sexta-feira, das 07h30 às 13h30.\n" +
+            "- **Expediente Administrativo:** Das 07h30 às 17h00.\n" +
+            "- **Site Oficial:** `www.tupa.sp.gov.br`.",
+          palavrasChave: ["prefeitura", "endereco prefeitura", "telefone prefeitura", "horario prefeitura", "pabx", "onde fica a prefeitura"]
+        },
+        {
+          pergunta: "Onde fica a UPA e a Santa Casa de Tupã para atendimento de saúde?",
+          resposta: "Em caso de emergências de saúde em Tupã:\n\n" +
+            "- **UPA 24 Horas:** Atendimento médico de urgência 24h, localizada na Rua Guaranis, nº 1822 - Vila Santa Inez. Telefone: (14) 3404-2200.\n" +
+            "- **Santa Casa de Misericórdia de Tupã:** Hospital geral de referência e cirurgias, localizado na Rua Cherentes, nº 599. Telefone: (14) 3404-5555.\n" +
+            "- **SAMU:** Disque 192 para emergências móveis.",
+          palavrasChave: ["upa", "santa casa", "hospital", "pronto socorro", "saude", "medico", "emergencia saude", "samu"]
+        },
+        {
+          pergunta: "Como emitir 2ª via de IPTU e certidões na Prefeitura?",
+          resposta: "Para emitir a segunda via de IPTU, certidão negativa de débitos municipais ou certidão de valor venal:\n\n" +
+            "1. Acesse o portal da prefeitura em **tupa.sp.gov.br**.\n" +
+            "2. No menu **Cidadão**, clique em **2ª Via de IPTU** ou **Serviços Tributários**.\n" +
+            "3. Informe o número do cadastro do imóvel ou CPF/CNPJ do proprietário.\n" +
+            "4. Você também pode ser atendido presencialmente no Paço Municipal (Praça da Bandeira, 800) das 07h30 às 13h30.",
+          palavrasChave: ["iptu", "segunda via iptu", "certidao", "taxas", "tributos", "imposto"]
+        }
+      ]
+    },
+
+    {
+      id: "historia",
+      titulo: "História & Fundação",
+      icone: "📜",
+      badge: "Fundada em 1929",
+      resumo: "Conheça a fundação em 12 de outubro de 1929 e Luiz de Souza Leão.",
+      itens: [
+        {
+          pergunta: "Como aconteceu a fundação de Tupã?",
+          resposta: "Tupã nasceu no dia **12 de outubro de 1929** por iniciativa de **Luiz de Souza Leão**. Visionário, ele planejou a cidade no alto do espigão divisor entre os rios Feio (Aguapeí) e do Peixe, projetando avenidas largas com 30 metros de largura e quadras perfeitamente traçadas, garantindo luminosidade e arborização que marcam a cidade até hoje.",
+          palavrasChave: ["fundacao", "fundador", "luiz de souza leao", "historia de tupa", "12 de outubro de 1929"]
+        },
+        {
+          pergunta: "Por que a cidade se chama Tupã?",
+          resposta: "O nome **Tupã** vem da língua Tupi-Guarani e reverencia o Grande Espírito / Criador / Deus do Trovão. Foi escolhido pelo fundador Luiz de Souza Leão em homenagem aos povos indígenas que habitavam as matas ancestrais da Alta Paulista, como os povos Kaingang e Krenak.",
+          palavrasChave: ["origem do nome", "significado tupa", "tupi", "deus do trovao", "por que tupa"]
         },
         {
           pergunta: "Quem foi a Índia Vanuíre?",
-          resposta: "**Vanuíre** foi uma célebre líder indígena Kaingang que teve papel histórico pacificador crucial no início do século XX na Alta Paulista. Ela atuou como mediadora cultural entre os colonizadores e os povos originários, subindo em árvores e cantando em sua língua nativa para evitar massacres e promover a paz. Ela dá nome ao principal museu da cidade.",
-          palavrasChave: ["india vanuire", "vanuire", "kaingang", "pacificadora", "indigena", "origens"]
+          resposta: "A **Índia Vanuíre** (da etnia Kaingang) foi uma das personagens históricas mais emblemáticas do interior de SP. No início do século XX, atuou corajosamente como mediadora de paz durante a expansão das ferrovias e desbravamento das florestas, evitando conflitos sangrentos entre colonizadores e tribos indígenas. Por sua coragem pacifista, tornou-se símbolo e patrona do maior museu da cidade.",
+          palavrasChave: ["quem foi vanuire", "india vanuire", "kaingang", "pacificadora", "historia indigena"]
         }
       ]
     },
-    {
-      id: "turismo",
-      titulo: "Pontos Turísticos & Cultura",
-      icone: "🏺",
-      resumo: "Museu Índia Vanuíre, Solar Luiz de Souza Leão, Praça da Bandeira e Varpa.",
-      itens: [
-        {
-          pergunta: "O que é o Museu Histórico e Pedagógico Índia Vanuíre?",
-          resposta: "O **Museu Índia Vanuíre** (inaugurado em 1966) é um dos maiores e mais importantes museus etnográficos do Brasil! Administrado em parceria com o Governo do Estado de SP e a ACAM Portinari, possui um acervo monumental sobre povos indígenas brasileiros (especialmente Kaingang, Krenak, Terena e Guarani), além da história dos pioneiros. Fica na Rua Coroados, 521, no Centro de Tupã.",
-          palavrasChave: ["museu india vanuire", "museu", "acervo", "etnografico", "indios", "visitar", "cultura"]
-        },
-        {
-          pergunta: "O que é o Solar Luiz de Souza Leão?",
-          resposta: "O **Solar Luiz de Souza Leão** é a antiga residência histórica do fundador de Tupã, situada em frente à Praça da Bandeira. Tombada pelo Condephaat como Patrimônio Histórico, a mansão preserva mobiliário nobre dos anos 1930/1940, documentos fundacionais e conta com um belíssimo bosque com dezenas de árvores nativas preservadas.",
-          palavrasChave: ["solar", "solar luiz de souza leao", "mansao", "patrimonio", "condephaat", "casa do fundador"]
-        },
-        {
-          pergunta: "Como é a Praça da Bandeira e a Igreja Matriz de São Pedro?",
-          resposta: "A **Praça da Bandeira** é o coração cívico e social de Tupã. É ampla, arborizada, conta com fonte luminosa, concha acústica, parquinho infantil e o famoso Obelisco. Nela fica a imponente **Igreja Matriz de São Pedro**, padroeiro de Tupã, com bela arquitetura, vitrais e celebrações históricas todo dia 29 de junho.",
-          palavrasChave: ["praca da bandeira", "igreja matriz", "sao pedro", "padroeiro", "centro", "obelisco", "fonte"]
-        },
-        {
-          pergunta: "O que tem para fazer no Distrito de Varpa?",
-          resposta: "**Varpa** é uma joia turística e cultural de Tupã! Fundada em 1922 por imigrantes da Letônia (imigração letã), preserva a arquitetura europeia de madeira, o **Museu dos Pioneiros 'Janis Erdbergs'**, a Igreja Batista pioneira, artesanato de palha de milho, queijos típicos, doces, mel e defumados letones. Além disso, abriga belezas naturais como a Cachoeira do Palma e o Balneário Sete de Setembro.",
-          palavrasChave: ["varpa", "letonia", "letos", "imigracao leta", "museu dos pioneiros", "artesanato", "cachoeira", "defumados"]
-        },
-        {
-          pergunta: "Tupã tem parques aquáticos e ecoturismo?",
-          resposta: "Sim! Tupã conta com opções incríveis de lazer termal e ecológico, como o **Eco Thermas Tupã** (parque aquático com águas termais, piscinas de ondas e toboáguas), o **Recanto das Águas**, fazendas com turismo rural, orquidários e trilhas na Bacia dos rios Aguapeí e do Peixe.",
-          palavrasChave: ["ecotermas", "eco thermas", "termas", "parque aquatico", "piscinas", "lazer", "balneario"]
-        }
-      ]
-    },
+
     {
       id: "educacao",
-      titulo: "Educação & Faculdades",
+      titulo: "Educação Superior (FADAP & UNESP)",
       icone: "🎓",
-      resumo: "Polo universitário da Alta Paulista: FADAP / FAP, UNESP, ETEC e FATEC.",
+      badge: "Polo Universitário",
+      resumo: "Tradição das Faculdades da Alta Paulista (FADAP), UNESP, ETEC e FATEC.",
       itens: [
         {
           pergunta: "Quais faculdades e universidades existem em Tupã?",
-          resposta: "Tupã é um forte polo de ensino superior da Alta Paulista:\n- **FADAP / FAP (Faculdade da Alta Paulista)**: Tradicional instituição de ensino superior com décadas de história na formação em Direito, Administração e outras áreas.\n- **UNESP (Campus de Tupã - FCE)**: Faculdade de Ciências e Engenharia da Universidade Estadual Paulista, oferecendo cursos de ponta como Engenharia de Biossistemas e Administração.\n- **ETEC Prof. Massuyuki Kawano**: Excelência em ensino técnico profissionalizante.\n- **FATEC Tupã**: Ensino superior tecnológico público.",
-          palavrasChave: ["faculdade", "universidade", "fadap", "fap", "unesp", "etec", "fatec", "estudo", "educacao", "cursos"]
+          resposta: "Tupã é um reconhecido polo educacional universitário regional:\n\n" +
+            "- **FADAP / FAP (Faculdade da Alta Paulista):** Instituição histórica e prestigiada, com décadas de tradição na formação de profissionais em Direito, Administração, Contábeis e diversas áreas.\n" +
+            "- **UNESP (Campus Tupã - FCE):** Faculdade de Ciências e Engenharia da Universidade Estadual Paulista, oferecendo cursos de excelência nacional como Engenharia de Biossistemas e Administração.\n" +
+            "- **ETEC Prof. Massuyuki Kawano:** Centro Paula Souza com cursos técnicos de alta empregabilidade.\n" +
+            "- **FATEC Tupã:** Ensino superior de tecnologia gratuito e focado no mercado.",
+          palavrasChave: ["faculdades", "universidades", "fadap", "unesp", "etec", "fatec", "cursos", "estudar em tupa"]
         },
         {
-          pergunta: "O que é a FADAP e qual sua importância?",
-          resposta: "A **FADAP** (Faculdades da Alta Paulista) é uma das instituições educacionais mais tradicionais e renomadas da cidade. Há décadas tem formado milhares de bacharéis e líderes profissionais para toda a região oeste de São Paulo e estados vizinhos, principalmente nas áreas de Ciências Jurídicas e Gestão.",
-          palavrasChave: ["fadap", "faculdades de tupa", "fap", "direito fadap", "ensino superior fadap"]
-        },
-        {
-          pergunta: "Quais cursos a UNESP oferece em Tupã?",
-          resposta: "A **UNESP Tupã (FCE)** é reconhecida nacionalmente pelos seus cursos de **Engenharia de Biossistemas** (pioneiro no Brasil integrando agronegócio, tecnologia, automação e sustentabilidade) e **Administração**, além de programas de pós-graduação e mestrado que atraem estudantes do país inteiro.",
-          palavrasChave: ["unesp", "engenharia de biossistemas", "administracao unesp", "pos graduacao unesp", "fce"]
+          pergunta: "O que destaca a FADAP na história de Tupã?",
+          resposta: "A **FADAP** é um dos pilares educacionais e de desenvolvimento do Oeste Paulista. Ao longo de décadas, foi responsável por formar juízes, promotores, advogados, empresários e líderes do agronegócio que hoje atuam em todo o Brasil.",
+          palavrasChave: ["fadap", "fap", "faculdades de tupa", "direito fadap", "tradicao fadap"]
         }
       ]
     },
+
     {
       id: "economia",
-      titulo: "Economia & Agronegócio",
+      titulo: "Economia & Capital do Amendoim",
       icone: "🥜",
-      resumo: "Capital Nacional do Amendoim, produção de ovos, cana-de-açúcar e comércio.",
+      badge: "Agronegócio",
+      resumo: "Liderança mundial em amendoim, polo avícola (ovos) e usinas sucroalcooleiras.",
       itens: [
         {
-          pergunta: "Por que Tupã é chamada de Capital do Amendoim?",
-          resposta: "A região de Tupã é um dos maiores polos mundiais de plantio, beneficiamento e exportação de **amendoim**! A cidade abriga grandes cooperativas e indústrias de ponta no setor de doces, confeitos, pasta de amendoim e grãos in natura, exportando toneladas para a União Europeia, América Latina e Ásia.",
-          palavrasChave: ["amendoim", "capital do amendoim", "agro", "producao", "exportacao", "industria", "economia"]
+          pergunta: "Por que Tupã é a Capital Nacional do Amendoim?",
+          resposta: "Tupã é reconhecida nacional e internacionalmente como o maior polo de produção, beneficiamento, confeitos e exportação de **amendoim** do Brasil!\n\n" +
+            "- Abriga cooperativas agrícolas gigantescas e indústrias modernas que abastecem os mercados brasileiro, europeu e asiático.\n" +
+            "- O solo fértil da Alta Paulista proporciona um produto de altíssima pureza e sabor, presente desde o amendoim in natura até pastas, doces e confeitos.",
+          palavrasChave: ["amendoim", "capital do amendoim", "producao de amendoim", "exportacao amendoim", "economia de tupa"]
         },
         {
-          pergunta: "Quais são as outras forças econômicas de Tupã?",
-          resposta: "Além do amendoim, Tupã se destaca por:\n- **Avicultura de Postura**: A região é uma das maiores produtoras de ovos do Brasil.\n- **Sucroalcooleiro**: Cultivo de cana-de-açúcar e usinas de etanol e açúcar.\n- **Indústria e Comércio**: Setor metalmecânico, moveleiro e confecções, além de um comércio central dinâmico que atende dezenas de cidades vizinhas.",
-          palavrasChave: ["avicultura", "ovos", "cana de acucar", "usinas", "comercio", "trabalho", "pib", "riqueza"]
+          pergunta: "Quais são as outras atividades econômicas fortes de Tupã?",
+          resposta: "Além do amendoim, Tupã destaca-se por:\n\n" +
+            "1. **Avicultura de Postura:** A região de Tupã e Bastos forma um dos maiores polos produtores e distribuidores de ovos do continente.\n" +
+            "2. **Cana-de-Açúcar e Bioenergia:** Usinas de etanol e açúcar modernas que geram empregos e energia renovável.\n" +
+            "3. **Comércio e Serviços:** Mais de 3.000 estabelecimentos comerciais no Centro atendendo mais de 10 municípios circunvizinhos.",
+          palavrasChave: ["economia", "avicultura", "ovos", "cana de acucar", "comercio", "trabalho"]
         }
       ]
     },
+
     {
       id: "eventos",
-      titulo: "Festas, Eventos & Gastronomia",
+      titulo: "Eventos Oficiais & Festas",
       icone: "🎉",
-      resumo: "Exapit, Tupã Junina, cultura japonesa e culinária típica.",
+      badge: "Calendário Oficial",
+      resumo: "EXAPIT, Tupã Junina, Festa das Nações e celebrações tradicionais.",
       itens: [
         {
           pergunta: "O que é a EXAPIT?",
-          resposta: "A **EXAPIT (Exposição Agropecuária e Industrial de Tupã)** é o maior e mais tradicional evento festivo do município. Realizada no Recinto de Exposições 'Cel. Octávio Barros Castanheira', reúne leilões de gado, exposições do agronegócio, parque de diversões, rodeio profissional e grandes shows de artistas nacionais com entrada franca ou beneficente.",
-          palavrasChave: ["exapit", "festa de peao", "rodeio", "recinto", "shows", "exposicao agropecuaria"]
+          resposta: "A **EXAPIT (Exposição Agropecuária e Industrial de Tupã)** é a maior feira e festa popular da cidade, realizada anualmente em agosto no Recinto de Exposições Cel. Octávio Barros Castanheira. Reúne grandes shows nacionais com portões abertos, rodeio em touros e cavalos, praça de alimentação, exposições de animais e negócios do agronegócio.",
+          palavrasChave: ["exapit", "festa de peao", "rodeio", "shows em tupa", "recinto de exposicoes"]
         },
         {
           pergunta: "Como é a Tupã Junina?",
-          resposta: "A **Tupã Junina** é um dos maiores arraiais do interior paulista! Ocorre anualmente na Praça da Bandeira, com decoração típica especial, dezenas de barracas de comidas tradicionais (quentão, pamonha, espetinhos), apresentações de quadrilhas premiadas e grandes shows populares.",
-          palavrasChave: ["tupa junina", "festa junina", "arraia", "sao joao", "quadrilha", "comidas tipicas"]
-        },
-        {
-          pergunta: "Quais são as influências gastronômicas de Tupã?",
-          resposta: "A gastronomia tupaense é rica e diversificada graças aos seus colonizadores:\n- **Pratos e doces de amendoim** (pé de moleque, paçoca fresca, pratos regionais).\n- **Culinária letã em Varpa** (pães escuros de centeio, queijo de caraway, linguiças defumadas artesanais, mel puro e biscoitos de gengibre piparkūkas).\n- **Culinária japonesa** (comunidade ativa na ACERT que realiza eventos com yakisoba, sushi e o tradicional almoço beneficente).\n- **Comida caipira tradicional** paulista (feijão gordo, leitoa, costela e pamonha).",
-          palavrasChave: ["gastronomia", "comida", "culinaria", "doces", "restaurantes", "onde comer", "comida letonia"]
+          resposta: "A **Tupã Junina** é realizada no mês de junho no circuito da Praça da Bandeira. Considerada um dos maiores arraiais públicos do interior de São Paulo, conta com concurso de quadrilhas estilizadas, barracas gastronômicas das entidades beneficentes da cidade e shows musicais diários gratuitos.",
+          palavrasChave: ["tupa junina", "festa junina", "arraia", "sao pedro", "quadrilha"]
         }
       ]
     },
+
     {
       id: "distritos",
-      titulo: "Distritos de Tupã",
+      titulo: "Distritos Oficiais (Varpa, Parnaso e Universo)",
       icone: "🗺️",
-      resumo: "Conheça os distritos de Varpa, Parnaso e Universo.",
+      badge: "Território",
+      resumo: "Conheça os distritos rurais e históricos que integram o município de Tupã.",
       itens: [
         {
-          pergunta: "Quais são os distritos do município de Tupã?",
-          resposta: "O município de Tupã é composto pela sede urbana e três distritos oficiais:\n1. **Varpa**: Célebre pela imigração letã de 1922, ecoturismo e gastronomia artesanal.\n2. **Parnaso**: Distrito agrícola acolhedor, com forte produção rural familiar e festas de comunidade.\n3. **Universo**: Polo rural com forte produção agrícola, comunidade unida e eventos tradicionais no campo.",
-          palavrasChave: ["distritos", "parnaso", "universo", "varpa", "zona rural", "municipio"]
+          pergunta: "Quais são os distritos de Tupã?",
+          resposta: "O município de Tupã é integrado por três distritos oficiais:\n\n" +
+            "1. **Varpa:** Distrito histórico da imigração letã de 1922, com forte vocação turística, arquitetura histórica e artesanato.\n" +
+            "2. **Parnaso:** Distrito acolhedor localizado a nordeste, com forte tradição na agricultura familiar e comunidade unida.\n" +
+            "3. **Universo:** Distrito localizado ao norte, com vocação agrícola, cultivo de cana, amendoim e pastagens.",
+          palavrasChave: ["distritos de tupa", "varpa", "parnaso", "universo", "zona rural"]
         }
       ]
     }
   ],
 
   curiosidades: [
+    "A fundação de Tupã ocorreu em 12 de outubro de 1929, mesmo dia consagrado à padroeira do Brasil, Nossa Senhora Aparecida.",
     "O fundador Luiz de Souza Leão mandou desenhar o traçado das avenidas com 30 metros de largura para garantir ventilação e arborização.",
     "Varpa abriga a maior concentração de descendentes de letos de toda a América do Sul!",
     "O Museu Índia Vanuíre possui uma das 3 maiores coleções etnográficas indígenas de todo o território brasileiro.",
-    "A padroeira original e o padroeiro de Tupã é São Pedro, comemorado com festa popular no dia 29 de junho.",
-    "A bandeira de Tupã traz as cores azul, branco e vermelho, com o cocar indígena simbolizando a raiz e o sol simbolizando o futuro próspero."
+    "A bandeira de Tupã traz as cores azul, branco e vermelho, com o cocar indígena simbolizando a raiz e o sol nascente o progresso.",
+    "A UPA de Tupã funciona 24 horas ininterruptas na Rua Guaranis, com atendimento pré-hospitalar para toda a microrregião.",
+    "A sede da Prefeitura Municipal está instalada na histórica Praça da Bandeira, 800, no centro da cidade."
   ]
 };
 
-// Prompt do Sistema caso o usuário queira plugar uma IA externa (ex: Google Gemini)
-const TUPA_SYSTEM_PROMPT = `Você é o TupãBot, a Inteligência Artificial especialista oficial na Estância Turística de Tupã, estado de São Paulo, Brasil.
-Seu papel é responder com precisão, entusiasmo, educação e riqueza de detalhes a qualquer dúvida sobre a cidade de Tupã.
-Você conhece detalhadamente:
-- A fundação em 12 de outubro de 1929 por Luiz de Souza Leão e o significado do nome Tupã (Tupi-Guarani).
-- A figura histórica pacificadora da Índia Vanuíre (Kaingang).
-- O Museu Histórico e Pedagógico Índia Vanuíre e o Solar Luiz de Souza Leão.
-- A Praça da Bandeira, Igreja Matriz de São Pedro e os distritos de Varpa, Parnaso e Universo.
-- A colônia e imigração letã em Varpa (1922), Museu Janis Erdbergs, artesanato e gastronomia de Varpa.
-- O polo universitário com a FADAP (Faculdade da Alta Paulista), UNESP (FCE - Engenharia de Biossistemas e Administração), ETEC Massuyuki Kawano e FATEC.
-- A economia como Capital do Amendoim, polo avícola (ovos), cana-de-açúcar e agronegócio.
-- Festas tradicionais como a EXAPIT e a Tupã Junina.
-Responda sempre em português brasileiro de forma acolhedora, clara e bem estruturada.`;
+// Prompt Especializado para o Chatbot com o contexto oficial de Tupã
+const TUPA_SYSTEM_PROMPT = `Você é o Tupã IA, assistente oficial e especialista na Estância Turística de Tupã (SP).
+Seu conhecimento é fundamentado nos dados institucionais oficiais da Prefeitura de Tupã (tupa.sp.gov.br) e órgãos de turismo e cultura:
+- Símbolos, fundação em 12 de outubro de 1929 por Luiz de Souza Leão e traçado urbano moderno.
+- A Índia Vanuíre e o renomado Museu Histórico e Pedagógico Índia Vanuíre (Rua Coroados, 521).
+- O Solar Luiz de Souza Leão (Rua Caingangs, 600) tombado pelo CONDEPHAAT.
+- A Igreja Matriz de São Pedro e a ampla Praça da Bandeira (sede da Prefeitura no nº 800).
+- Os 3 distritos: Varpa (colonização letã de 1922, Museu Janis Erdbergs, artesanato e gastronomia), Parnaso e Universo.
+- Ensino Superior: A tradicional FADAP (Faculdades da Alta Paulista) e o campus da UNESP (Faculdade de Ciências e Engenharia - FCE).
+- Economia: Capital Nacional do Amendoim, avicultura de postura (ovos) e usinas sucroalcooleiras.
+- Festividades: EXAPIT (agosto) e Tupã Junina (junho).
+- Serviços e Saúde: UPA 24 Horas (Rua Guaranis), Santa Casa de Misericórdia (Rua Cherentes), PABX Prefeitura (14) 3404-1000.
+Responda sempre com tom acolhedor, profissional, claro e bem formatado em português brasileiro.`;
 
 if (typeof module !== 'undefined') {
   module.exports = { TUPA_KNOWLEDGE_BASE, TUPA_SYSTEM_PROMPT };

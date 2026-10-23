@@ -3,162 +3,339 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tupã IA - Especialista na Estância Turística de Tupã</title>
+  <title>Tupã IA - Especialista na Estância Turística de Tupã (SP)</title>
   
   <!-- Fontes do Google -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   
-  <!-- Estilos -->
+  <!-- Estilos Modernos e Cores Oficiais de Tupã -->
   <link rel="stylesheet" href="style.css">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏛️</text></svg>">
 </head>
 <body>
 
-  <!-- Cabeçalho -->
+  <!-- Faixa Institucional Oficial de Tupã -->
+  <div class="official-topbar">
+    <div>
+      🏛️ <strong>Estância Turística de Tupã</strong> — Alta Paulista, SP • Dados Oficiais Integrados
+    </div>
+    <div>
+      Portal Oficial: <a href="https://www.tupa.sp.gov.br" target="_blank" rel="noopener">www.tupa.sp.gov.br ↗</a>
+    </div>
+  </div>
+
+  <!-- Cabeçalho Principal Clean -->
   <header class="app-header">
     <div class="brand-wrapper">
-      <div class="brand-logo" title="Estância Turística de Tupã">🏛️</div>
+      <div class="brand-shield" title="Brasão da Estância Turística de Tupã">🏛️</div>
       <div class="brand-info">
-        <h1>Tupã IA <span class="badge-city">SP • 1929</span></h1>
-        <p>Especialista na Estância Turística e Histórica de Tupã</p>
+        <h1>Tupã IA <span class="badge-estancia">Estância Turística</span></h1>
+        <p>Assistente Virtual Especialista Oficial de Tupã (SP)</p>
       </div>
     </div>
 
     <div class="header-actions">
       <div class="status-pill" id="model-status-pill">
         <span class="status-dot"></span>
-        <span id="model-status-text">Base Local Ativa</span>
+        <span id="model-status-text">Base Oficial Ativa</span>
       </div>
       
-      <button class="btn-icon" id="btn-toggle-voice" title="Ativar/Desativar Leitura por Voz">
-        🔊
+      <button class="btn-header-action" id="btn-toggle-voice" title="Ativar/Desativar Leitura por Voz">
+        <span>🔊</span> <span class="action-text">Ouvir Respostas</span>
       </button>
 
-      <button class="btn-icon" id="btn-settings" title="Configurar Conexão Gemini IA">
-        ⚙️
+      <button class="btn-header-action" id="btn-settings" title="Conectar Google Gemini IA">
+        <span>⚙️</span> <span class="action-text">IA Online</span>
       </button>
 
-      <button class="btn-icon" id="btn-clear" title="Limpar Conversa">
-        🗑️
-      </button>
-
-      <button class="btn-icon" id="btn-about" title="Sobre Tupã e este Projeto">
-        ℹ️
+      <button class="btn-header-action" id="btn-clear" title="Reiniciar Conversa">
+        <span>🗑️</span> <span class="action-text">Limpar</span>
       </button>
     </div>
   </header>
 
-  <!-- Container Principal -->
-  <main class="app-container">
-    
-    <!-- Barra Lateral: Tópicos Rápidos -->
-    <aside class="sidebar" id="sidebar">
-      <div class="sidebar-header">
-        <h2>Guia de Tupã</h2>
-        <p>Clique em um tema para saber mais</p>
-      </div>
+  <!-- Barra de Abas (Navegação Principal) -->
+  <nav class="nav-tabs-wrapper">
+    <div class="nav-tabs">
+      <button class="tab-btn active" data-tab="tab-chat" onclick="switchTab('tab-chat')">
+        💬 Tire sua Dúvida <span class="tab-badge">Chat Livre</span>
+      </button>
+      <button class="tab-btn" data-tab="tab-faq" onclick="switchTab('tab-faq')">
+        ❓ Perguntas Programadas <span class="tab-badge">Guias Rápidos</span>
+      </button>
+      <button class="tab-btn" data-tab="tab-turismo" onclick="switchTab('tab-turismo')">
+        🏺 Pontos Turísticos & Cultura <span class="tab-badge">5 Atrações</span>
+      </button>
+      <button class="tab-btn" data-tab="tab-servicos" onclick="switchTab('tab-servicos')">
+        🏢 Serviços da Prefeitura & Telefones <span class="tab-badge">tupa.sp.gov.br</span>
+      </button>
+    </div>
+  </nav>
 
-      <div class="sidebar-content" id="topics-list">
-        <!-- Gerado via JavaScript -->
-      </div>
+  <!-- Container de Conteúdo -->
+  <main class="main-wrapper">
 
-      <div class="curiosity-box">
-        <h4>✨ Você Sabia?</h4>
-        <p id="curiosity-text">Carregando curiosidade...</p>
-      </div>
-    </aside>
-
-    <!-- Área Central de Chat -->
-    <section class="chat-container">
-      <div class="chat-messages" id="chat-messages">
+    <!-- ABA 1: TIRE SUA DÚVIDA (CHAT LIVRE E INTERATIVO) -->
+    <div class="tab-panel active" id="tab-chat">
+      <div class="chat-layout">
         
-        <!-- Cartão de Boas-Vindas -->
-        <div class="welcome-hero">
-          <h2>👋 Olá! Sou o Tupã IA</h2>
-          <p>Seu assistente inteligente especializado em tudo sobre a <strong>Estância Turística de Tupã (SP)</strong>. Pergunte-me sobre a fundação, o Museu Índia Vanuíre, a imigração letã em Varpa, as faculdades (FADAP e UNESP), a produção de amendoim, festas como a EXAPIT e muito mais!</p>
-          
-          <div class="chips-title">Sugestões rápidas de perguntas:</div>
-          <div class="quick-chips">
-            <button class="chip" onclick="askQuestion('Como e quando Tupã foi fundada?')">🏛️ Fundação em 1929</button>
-            <button class="chip" onclick="askQuestion('Quem foi a Índia Vanuíre e o que tem no museu?')">🏺 Museu Índia Vanuíre</button>
-            <button class="chip" onclick="askQuestion('O que tem no distrito de Varpa?')">🌲 Colônia Letã de Varpa</button>
-            <button class="chip" onclick="askQuestion('Quais faculdades existem em Tupã? Como é a FADAP e UNESP?')">🎓 FADAP & UNESP</button>
-            <button class="chip" onclick="askQuestion('Por que Tupã é a Capital do Amendoim?')">🥜 Capital do Amendoim</button>
-            <button class="chip" onclick="askQuestion('O que é a EXAPIT e a Tupã Junina?')">🎉 Festas e Tradições</button>
-            <button class="chip" onclick="askQuestion('O que fazer em um fim de semana em Tupã?')">🗺️ Roteiro Turístico</button>
+        <!-- Área Central de Chat -->
+        <div class="chat-card">
+          <div class="chat-messages" id="chat-messages">
+            
+            <!-- Hero de Boas-Vindas com Sugestões -->
+            <div class="welcome-box">
+              <h2>👋 Bem-vindo ao Tupã IA!</h2>
+              <p>Olá! Sou o assistente especializado na <strong>Estância Turística de Tupã (SP)</strong>, abastecido com as informações do portal oficial da Prefeitura (<strong>tupa.sp.gov.br</strong>), dados históricos e patrimoniais. Você pode fazer <strong>qualquer pergunta própria</strong> abaixo ou clicar em uma das sugestões rápidas!</p>
+              
+              <div class="chips-title">Dúvidas Frequentes para começar:</div>
+              <div class="quick-chips">
+                <button class="chip" onclick="askQuestion('Como Tupã foi fundada e quem foi Luiz de Souza Leão?')">📜 Fundação e 1929</button>
+                <button class="chip" onclick="askQuestion('Como visitar o Museu Índia Vanuíre? Quais os horários e acervo?')">🏺 Museu Índia Vanuíre</button>
+                <button class="chip" onclick="askQuestion('O que conhecer no Distrito de Varpa e a colônia letã?')">🌲 Imigração Letã em Varpa</button>
+                <button class="chip" onclick="askQuestion('Quais faculdades existem em Tupã? Como é a FADAP e a UNESP?')">🎓 Faculdades (FADAP & UNESP)</button>
+                <button class="chip" onclick="askQuestion('Por que Tupã é a Capital Nacional do Amendoim?')">🥜 Capital do Amendoim</button>
+                <button class="chip" onclick="askQuestion('Onde fica a UPA 24h e quais os telefones de emergência?')">🏥 UPA 24h & Telefones Úteis</button>
+                <button class="chip" onclick="askQuestion('Sugira um roteiro de turismo para passar um fim de semana em Tupã')">🗺️ Roteiro Turístico</button>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Barra de Digitação Livre para o Usuário -->
+          <div class="chat-input-area">
+            <form id="chat-form" onsubmit="handleFormSubmit(event)">
+              <div class="input-wrapper">
+                <textarea 
+                  id="chat-input" 
+                  placeholder="Digite sua dúvida livremente aqui (ex: 'onde tirar 2ª via de IPTU?', 'horários do museu', 'história de Varpa')..." 
+                  rows="1"
+                  required
+                ></textarea>
+                
+                <button type="submit" class="btn-send" id="btn-send" title="Enviar Pergunta">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="22" y1="2" x2="11" y2="13"></line>
+                    <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                  </svg>
+                </button>
+              </div>
+              <div class="input-footer">
+                <span>Pressione <strong>Enter</strong> para enviar sua dúvida</span>
+                <span>Prefeitura de Tupã • tupa.sp.gov.br</span>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Painel Lateral: Ficha da Estância & Curiosidades -->
+        <aside class="chat-sidebar">
+          <div class="side-card">
+            <h3>🏛️ Estância Turística de Tupã</h3>
+            <div class="fact-item">
+              <span class="fact-label">Fundação:</span>
+              <span class="fact-value">12/10/1929</span>
+            </div>
+            <div class="fact-item">
+              <span class="fact-label">Fundador:</span>
+              <span class="fact-value">Luiz de Souza Leão</span>
+            </div>
+            <div class="fact-item">
+              <span class="fact-label">População:</span>
+              <span class="fact-value">~65.000 hab.</span>
+            </div>
+            <div class="fact-item">
+              <span class="fact-label">Região:</span>
+              <span class="fact-value">Alta Paulista (SP)</span>
+            </div>
+            <div class="fact-item">
+              <span class="fact-label">Padroeiro:</span>
+              <span class="fact-value">São Pedro (29 de Junho)</span>
+            </div>
+            <div class="fact-item">
+              <span class="fact-label">PABX Prefeitura:</span>
+              <span class="fact-value">(14) 3404-1000</span>
+            </div>
+          </div>
+
+          <div class="side-card curiosity-card">
+            <h4>✨ Você Sabia?</h4>
+            <p id="curiosity-text">O Distrito de Varpa, em Tupã, abriga a maior comunidade de descendentes da Letônia de toda a América do Sul!</p>
+          </div>
+        </aside>
+
+      </div>
+    </div>
+
+    <!-- ABA 2: PERGUNTAS FREQUENTES & GUIAS PROGRAMADOS -->
+    <div class="tab-panel" id="tab-faq">
+      <div class="faq-header">
+        <h2>Perguntas Frequentes & Guias Oficiais</h2>
+        <p>Explore as principais dúvidas sobre turismo, história, serviços municipais e educação em Tupã</p>
+        
+        <div class="faq-search-box">
+          <span>🔍</span>
+          <input type="text" id="faq-search-input" placeholder="Filtrar perguntas (ex: 'museu', 'iptu', 'varpa', 'unesp')..." oninput="filterFaq()">
+        </div>
+      </div>
+
+      <div class="faq-grid" id="faq-container">
+        <!-- Preenchido dinamicamente via JS -->
+      </div>
+    </div>
+
+    <!-- ABA 3: PONTOS TURÍSTICOS OFICIAIS -->
+    <div class="tab-panel" id="tab-turismo">
+      <div class="faq-header">
+        <h2>Cartões-Postais e Ecoturismo de Tupã</h2>
+        <p>A Estância Turística de Tupã possui patrimônios reconhecidos nacionalmente</p>
+      </div>
+
+      <div class="tourist-grid">
+        
+        <div class="tourist-card">
+          <div class="tourist-card-header">
+            <span class="tourist-icon">🏺</span>
+            <div class="tourist-header-text">
+              <h3>Museu Índia Vanuíre</h3>
+              <span>Etnografia Indígena e História Regional</span>
+            </div>
+          </div>
+          <div class="tourist-body">
+            <p>Um dos museus etnográficos mais respeitados do país! Guarda milhares de peças das etnias Kaingang, Krenak, Terena e Guarani, além de preservar a memória pacificadora da Índia Vanuíre.</p>
+            <div class="tourist-meta">
+              📍 <strong>Endereço:</strong> Rua Coroados, 521 - Centro<br>
+              🕒 <strong>Horário:</strong> Terça a domingo, 09h às 18h (Entrada Gratuita)
+            </div>
+            <button class="btn-ask-spot" onclick="askSpot('Conte-me mais sobre o Museu Índia Vanuíre')">Perguntar no Chat ↗</button>
+          </div>
+        </div>
+
+        <div class="tourist-card">
+          <div class="tourist-card-header">
+            <span class="tourist-icon">🏡</span>
+            <div class="tourist-header-text">
+              <h3>Solar Luiz de Souza Leão</h3>
+              <span>Patrimônio Histórico Tombado</span>
+            </div>
+          </div>
+          <div class="tourist-body">
+            <p>Antiga mansão e residência do fundador de Tupã. Tombada pelo CONDEPHAAT, preserva mobiliário dos anos 1930, documentos originais e um magnífico bosque de árvores centenárias.</p>
+            <div class="tourist-meta">
+              📍 <strong>Endereço:</strong> Rua Caingangs, 600 - Centro<br>
+              🕒 <strong>Horário:</strong> Segunda a sexta-feira, em horário comercial
+            </div>
+            <button class="btn-ask-spot" onclick="askSpot('Conte-me a história do Solar Luiz de Souza Leão')">Perguntar no Chat ↗</button>
+          </div>
+        </div>
+
+        <div class="tourist-card">
+          <div class="tourist-card-header">
+            <span class="tourist-icon">🌲</span>
+            <div class="tourist-header-text">
+              <h3>Distrito de Varpa</h3>
+              <span>Circuito Caminhos da Letônia</span>
+            </div>
+          </div>
+          <div class="tourist-body">
+            <p>Colonizado em 1922 por pioneiros batistas da Letônia. Destaque para o Museu dos Pioneiros "Janis Erdbergs", arquitetura de madeira, Cachoeira do Palma e culinária típica de queijos e defumados.</p>
+            <div class="tourist-meta">
+              📍 <strong>Localização:</strong> Distrito de Varpa (a 28 km do centro)<br>
+              🕒 <strong>Atrativos:</strong> Ecoturismo, artesanato e gastronomia letã
+            </div>
+            <button class="btn-ask-spot" onclick="askSpot('O que fazer no Distrito de Varpa?')">Perguntar no Chat ↗</button>
+          </div>
+        </div>
+
+        <div class="tourist-card">
+          <div class="tourist-card-header">
+            <span class="tourist-icon">⛪</span>
+            <div class="tourist-header-text">
+              <h3>Igreja Matriz de São Pedro</h3>
+              <span>Coração Cívico e Religioso</span>
+            </div>
+          </div>
+          <div class="tourist-body">
+            <p>Situada na ampla Praça da Bandeira, a Matriz de São Pedro possui belíssima arquitetura, vitrais e celebra o padroeiro municipal com festa popular no dia 29 de junho.</p>
+            <div class="tourist-meta">
+              📍 <strong>Localização:</strong> Praça da Bandeira - Centro<br>
+              🕒 <strong>Entorno:</strong> Fonte luminosa interativa, concha acústica e obelisco
+            </div>
+            <button class="btn-ask-spot" onclick="askSpot('Conte-me sobre a Igreja Matriz de São Pedro e a Praça da Bandeira')">Perguntar no Chat ↗</button>
+          </div>
+        </div>
+
+        <div class="tourist-card">
+          <div class="tourist-card-header">
+            <span class="tourist-icon">🏊</span>
+            <div class="tourist-header-text">
+              <h3>Lazer Termal & Balneários</h3>
+              <span>Eco Thermas e Balneário 7 de Setembro</span>
+            </div>
+          </div>
+          <div class="tourist-body">
+            <p>Para quem busca relaxar, a região oferece o parque aquático de águas termais Eco Thermas Tupã, o Recanto das Águas e o tradicional Balneário Sete de Setembro em Varpa.</p>
+            <div class="tourist-meta">
+              📍 <strong>Localização:</strong> Acessos pelas rodovias e vicinais de Tupã<br>
+              🕒 <strong>Lazer:</strong> Piscinas de ondas, toboáguas e áreas de camping
+            </div>
+            <button class="btn-ask-spot" onclick="askSpot('Quais são as opções de lazer aquático e termas em Tupã?')">Perguntar no Chat ↗</button>
           </div>
         </div>
 
       </div>
+    </div>
 
-      <!-- Barra de Digitação -->
-      <div class="chat-input-area">
-        <form id="chat-form" onsubmit="handleFormSubmit(event)">
-          <div class="input-wrapper">
-            <textarea 
-              id="chat-input" 
-              placeholder="Pergunte qualquer coisa sobre a história, turismo ou economia de Tupã..." 
-              rows="1"
-              required
-            ></textarea>
-            
-            <button type="submit" class="btn-send" id="btn-send" title="Enviar Mensagem">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                <line x1="22" y1="2" x2="11" y2="13"></line>
-                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-              </svg>
-            </button>
-          </div>
-          <div class="input-footer">
-            <span>Pressione <strong>Enter</strong> para enviar</span>
-            <span id="knowledge-badge">Base de dados completa de Tupã integrada</span>
-          </div>
-        </form>
+    <!-- ABA 4: SERVIÇOS DA PREFEITURA & TELEFONES -->
+    <div class="tab-panel" id="tab-servicos">
+      <div class="faq-header">
+        <h2>Serviços Municipais e Telefones de Utilidade Pública</h2>
+        <p>Acesse serviços rápidos da Prefeitura de Tupã (tupa.sp.gov.br) e contatos de emergência</p>
       </div>
-    </section>
+
+      <div class="services-layout">
+        
+        <!-- Serviços ao Cidadão -->
+        <div>
+          <h3 style="font-size: 1.1rem; color: var(--tupa-blue-dark); margin-bottom: 1rem;">Serviços Online no Portal da Prefeitura</h3>
+          <div class="service-grid" id="services-container">
+            <!-- Gerado via JavaScript -->
+          </div>
+        </div>
+
+        <!-- Telefones e Emergências -->
+        <div>
+          <h3 style="font-size: 1.1rem; color: var(--tupa-blue-dark); margin-bottom: 1rem;">Telefones Úteis e Emergências</h3>
+          <div class="phones-list" id="phones-container">
+            <!-- Gerado via JavaScript -->
+          </div>
+        </div>
+
+      </div>
+    </div>
 
   </main>
 
-  <!-- Modal de Configurações da IA (Gemini / Provedor) -->
+  <!-- Modal Configurações IA (Gemini) -->
   <div class="modal-overlay" id="modal-settings">
     <div class="modal-card">
       <div class="modal-header">
         <h3>⚙️ Conexão de Inteligência Artificial</h3>
-        <button class="btn-icon" onclick="closeModal('modal-settings')">✕</button>
+        <button class="btn-header-action" onclick="closeModal('modal-settings')">✕</button>
       </div>
       <div class="modal-body">
-        <p style="margin-bottom: 1rem;">O Tupã IA já funciona <strong>100% offline e gratuitamente</strong> com o motor de conhecimento especializado integrado. Se desejar usar modelos generativos ao vivo (como o <strong>Google Gemini</strong>), insira sua chave de API abaixo:</p>
+        <p style="margin-bottom: 1rem;">O Tupã IA já opera com a <strong>base de dados oficial completa</strong> de Tupã offline. Se preferir usar um modelo generativo na nuvem (como o <strong>Google Gemini 1.5/2.0</strong>), insira sua chave abaixo:</p>
         
         <label for="gemini-api-key">Chave de API do Google Gemini (Opcional):</label>
         <input type="password" id="gemini-api-key" placeholder="AIzaSy...">
         
-        <small>Sua chave é armazenada com segurança somente no seu próprio navegador (LocalStorage) e nunca é compartilhada.</small>
+        <small style="color: var(--text-muted); display: block; margin-bottom: 1rem;">Sua chave permanece salva apenas no seu próprio navegador (LocalStorage) com segurança.</small>
       </div>
       <div class="modal-footer">
         <button class="btn-secondary" onclick="clearApiKey()">Remover Chave</button>
         <button class="btn-primary" onclick="saveApiKey()">Salvar Configuração</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Modal Sobre -->
-  <div class="modal-overlay" id="modal-about">
-    <div class="modal-card">
-      <div class="modal-header">
-        <h3>ℹ️ Sobre a Estância Turística de Tupã</h3>
-        <button class="btn-icon" onclick="closeModal('modal-about')">✕</button>
-      </div>
-      <div class="modal-body">
-        <p><strong>Tupã</strong> é um dos municípios mais marcantes do Oeste Paulista (Alta Paulista), oficialmente reconhecido como <strong>Estância Turística</strong> pelo Governo do Estado de São Paulo.</p>
-        <br>
-        <p>Destaca-se nacionalmente pelo <strong>Museu Histórico e Pedagógico Índia Vanuíre</strong>, pelo <strong>Distrito de Varpa</strong> (comunidade de imigração letã), pelo título de <strong>Capital Nacional do Amendoim</strong> e por sua forte tradição universitária (com destaque para a <strong>FADAP</strong> e a <strong>UNESP</strong>).</p>
-        <br>
-        <p style="font-size: 0.78rem; color: var(--text-muted);">Desenvolvido com carinho para preservar e divulgar o patrimônio cultural, histórico e econômico de Tupã.</p>
-      </div>
-      <div class="modal-footer">
-        <button class="btn-primary" onclick="closeModal('modal-about')">Fechar</button>
       </div>
     </div>
   </div>
