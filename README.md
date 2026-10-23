@@ -12,6 +12,7 @@ Portal interativo e assistente virtual inteligente alimentado com as informaçõ
 
 ### 1. 💬 Aba Dedicada: "Tire sua Dúvida" (Chat Livre)
 - Permite que qualquer pessoa digite e pergunte **livremente qualquer dúvida** sobre Tupã.
+- **📚 Citação Obrigatória de Fontes Oficiais:** Todas as respostas trazem a identificação explícita de onde a informação foi extraída (Portal da Prefeitura `tupa.sp.gov.br`, Museu Índia Vanuíre, CONDEPHAAT, UNESP, FADAP, IBGE ou Secretarias Municipais).
 - Sugestões dinâmicas de início rápido (chips interativos).
 - Respostas completas com formatação rica, botão para **copiar resposta** e **leitura por voz (áudio)**.
 - Painel lateral com ficha rápida da Estância e fatos curiosos.

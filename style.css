@@ -915,6 +915,42 @@ body {
   color: var(--tupa-red);
 }
 
+/* Caixa e Tag de Citação de Fonte Oficial */
+.source-box {
+  margin-top: 0.75rem;
+  padding: 0.45rem 0.75rem;
+  background: #f8fafc;
+  border-left: 3px solid var(--tupa-blue);
+  border-radius: var(--radius-sm);
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  line-height: 1.35;
+  border: 1px solid #e2e8f0;
+  border-left-width: 3px;
+  border-left-color: var(--tupa-blue);
+}
+
+.source-box strong {
+  color: var(--tupa-blue-dark);
+}
+
+.faq-source-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.68rem;
+  color: var(--tupa-blue-dark);
+  background: white;
+  border: 1px solid var(--border-highlight);
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  margin-top: 0.45rem;
+  font-weight: 600;
+}
+
 /* Modais */
 .modal-overlay {
   position: fixed;

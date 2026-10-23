@@ -68,7 +68,8 @@ function renderFaq() {
             </div>
             <div class="faq-answer" id="faq-ans-${cat.id}-${index}">
               <p>${formatMarkdown(item.resposta)}</p>
-              <button class="btn-msg-action" style="margin-top: 0.5rem;" onclick="askFaqQuestion('${escapeQuotes(item.pergunta)}')">
+              <div class="faq-source-badge">📚 <strong>Fonte:</strong> ${item.fonte || 'tupa.sp.gov.br'}</div>
+              <button class="btn-msg-action" style="margin-top: 0.6rem;" onclick="askFaqQuestion('${escapeQuotes(item.pergunta)}')">
                 💬 Conversar sobre isso no Chat
               </button>
             </div>
@@ -127,6 +128,7 @@ function renderServices() {
       <div class="service-icon">${serv.icone}</div>
       <h4>${serv.nome}</h4>
       <p>${serv.descricao}</p>
+      <div class="faq-source-badge" style="margin-bottom:0.75rem; display:block;">📚 <strong>Fonte:</strong> ${serv.fonte}</div>
       <a href="${serv.link}" target="_blank" rel="noopener" class="btn-service-link">
         Acessar no Portal Oficial ↗
       </a>
@@ -142,7 +144,7 @@ function renderPhones() {
     <div class="phone-item">
       <div class="phone-info">
         <strong>${item.orgao}</strong>
-        <small>${item.desc}</small>
+        <small>${item.desc} • Fonte: ${item.fonte}</small>
       </div>
       <div class="phone-num">${item.numero}</div>
     </div>
@@ -154,7 +156,8 @@ function updateCuriosity() {
   if (!curiosityText || !TUPA_KNOWLEDGE_BASE) return;
   const list = TUPA_KNOWLEDGE_BASE.curiosidades;
   const randomIndex = Math.floor(Math.random() * list.length);
-  curiosityText.textContent = list[randomIndex];
+  const cur = list[randomIndex];
+  curiosityText.innerHTML = `${cur.texto}<span style="display:block; margin-top:6px; font-size:0.68rem; opacity:0.85; font-weight:600;">📚 Fonte: ${cur.fonte}</span>`;
 }
 
 // Atualizar status do modelo
@@ -259,7 +262,7 @@ function generateLocalResponse(query) {
 
   // 1. Saudações
   if (isGreeting(qClean)) {
-    return `Olá! Sou o **Tupã IA**, assistente virtual especializado na **Estância Turística de Tupã (SP)**!\n\nEstou abastecido com informações oficiais da prefeitura (**tupa.sp.gov.br**), história de 1929, dados do Museu Índia Vanuíre, da colônia letã de Varpa, faculdades (FADAP e UNESP), produção de amendoim e serviços municipais.\n\nQual é a sua dúvida hoje?`;
+    return `Olá! Sou o **Tupã IA**, assistente virtual especializado na **Estância Turística de Tupã (SP)**!\n\nEstou abastecido com informações oficiais da prefeitura (**tupa.sp.gov.br**), história de 1929, dados do Museu Índia Vanuíre, da colônia letã de Varpa, faculdades (FADAP e UNESP), produção de amendoim e serviços municipais.\n\nQual é a sua dúvida hoje?\n\n📚 **Fonte Oficial:** Portal da Prefeitura da Estância Turística de Tupã (tupa.sp.gov.br) e Acervo Histórico Municipal`;
   }
 
   // 2. Telefones, Emergência e Prefeitura Geral
@@ -274,19 +277,22 @@ function generateLocalResponse(query) {
       `- **Defesa Civil:** 199\n` +
       `- **Museu Índia Vanuíre:** (14) 3491-2333\n` +
       `- **Secretaria de Turismo:** (14) 3491-5013\n\n` +
-      `Você também pode conferir todos os serviços municipais na aba **Serviços da Prefeitura & Telefones**.`;
+      `Você também pode conferir todos os serviços municipais na aba **Serviços da Prefeitura & Telefones**.\n\n` +
+      `📚 **Fonte Oficial:** Secretaria Municipal de Saúde de Tupã, Prefeitura de Tupã (tupa.sp.gov.br) e Polícia Militar SP`;
   }
 
   // 3. IPTU, Certidões e Tributos
   if (qClean.includes("iptu") || qClean.includes("certidao") || qClean.includes("tributo") || qClean.includes("nota fiscal") || qClean.includes("nfs")) {
     const item = kb.categorias.find(c => c.id === "prefeitura").itens.find(i => i.palavrasChave.includes("iptu"));
-    return item ? item.resposta : `Para serviços de IPTU, certidões e notas fiscais de Tupã, acesse o portal oficial da prefeitura em **www.tupa.sp.gov.br** no menu Cidadão, ou dirija-se ao Paço Municipal na Praça da Bandeira, 800 (das 07h30 às 13h30).`;
+    const resp = item ? item.resposta : `Para serviços de IPTU, certidões e notas fiscais de Tupã, acesse o portal oficial da prefeitura em **www.tupa.sp.gov.br** no menu Cidadão, ou dirija-se ao Paço Municipal na Praça da Bandeira, 800 (das 07h30 às 13h30).`;
+    const f = item ? item.fonte : "Secretaria Municipal de Economia e Finanças (tupa.sp.gov.br/iptu)";
+    return `${resp}\n\n📚 **Fonte Oficial:** ${f}`;
   }
 
   // 4. Endereço e Horário da Prefeitura
   if (qClean.includes("prefeitura") && (qClean.includes("horario") || qClean.includes("endereco") || qClean.includes("onde fica") || qClean.includes("aberta"))) {
     const item = kb.categorias.find(c => c.id === "prefeitura").itens.find(i => i.palavrasChave.includes("endereco prefeitura"));
-    return item.resposta;
+    return `${item.resposta}\n\n📚 **Fonte Oficial:** ${item.fonte}`;
   }
 
   // 5. Roteiro Turístico de Final de Semana
@@ -299,47 +305,52 @@ function generateLocalResponse(query) {
       `**Domingo: Cultura Europeia e Ecoturismo em Varpa**\n` +
       `- **Manhã:** Vá até o **Distrito de Varpa** (colônia letã de 1922) e visite o **Museu dos Pioneiros 'Janis Erdbergs'**.\n` +
       `- **Almoço:** Saboreie os queijos tradicionais, pão de centeio, mel e linguiças defumadas letonas.\n` +
-      `- **Tarde:** Refresque-se na natureza na **Cachoeira do Palma** ou aproveite o **Balneário Sete de Setembro**!`;
+      `- **Tarde:** Refresque-se na natureza na **Cachoeira do Palma** ou aproveite o **Balneário Sete de Setembro**!\n\n` +
+      `📚 **Fonte Oficial:** Secretaria Municipal de Turismo da Estância de Tupã (turismo.tupa.sp.gov.br) & SISEM-SP`;
   }
 
   // 6. FADAP e Universidades
   if (qClean.includes("fadap") || qClean.includes("fap") || qClean.includes("faculdade da alta paulista")) {
     const item = kb.categorias.find(c => c.id === "educacao").itens.find(i => i.palavrasChave.includes("fadap"));
-    return item ? item.resposta : "A FADAP (Faculdades da Alta Paulista) é uma tradicional instituição pioneira no ensino superior em Tupã, formadora de inúmeros juízes, advogados, administradores e líderes regionais.";
+    const resp = item ? item.resposta : "A FADAP (Faculdades da Alta Paulista) é uma tradicional instituição pioneira no ensino superior em Tupã, formadora de inúmeros juízes, advogados, administradores e líderes regionais.";
+    const f = item ? item.fonte : "Acervo Institucional FADAP / FAP e Histórico da Educação Superior em Tupã";
+    return `${resp}\n\n📚 **Fonte Oficial:** ${f}`;
   }
 
   // 7. UNESP
   if (qClean.includes("unesp") || qClean.includes("biosistemas") || qClean.includes("fce")) {
     const item = kb.categorias.find(c => c.id === "educacao").itens.find(i => i.palavrasChave.includes("unesp"));
-    return item ? item.resposta : "A UNESP Campus Tupã (Faculdade de Ciências e Engenharia - FCE) oferece cursos de graduação e pós-graduação de referência em Engenharia de Biossistemas e Administração.";
+    const resp = item ? item.resposta : "A UNESP Campus Tupã (Faculdade de Ciências e Engenharia - FCE) oferece cursos de graduação e pós-graduação de referência em Engenharia de Biossistemas e Administração.";
+    const f = item ? item.fonte : "Universidade Estadual Paulista - Unesp Campus Tupã (fce.unesp.br)";
+    return `${resp}\n\n📚 **Fonte Oficial:** ${f}`;
   }
 
   // 8. Museu Índia Vanuíre
   if (qClean.includes("vanuire") || qClean.includes("museu")) {
     const cat = kb.categorias.find(c => c.id === "turismo");
     const item = cat.itens.find(i => i.palavrasChave.includes("museu india vanuire"));
-    return item.resposta;
+    return `${item.resposta}\n\n📚 **Fonte Oficial:** ${item.fonte}`;
   }
 
   // 9. Varpa e Letônia
   if (qClean.includes("varpa") || qClean.includes("letonia") || qClean.includes("letos") || qClean.includes("erdbergs")) {
     const cat = kb.categorias.find(c => c.id === "turismo");
     const item = cat.itens.find(i => i.palavrasChave.includes("varpa"));
-    return item.resposta;
+    return `${item.resposta}\n\n📚 **Fonte Oficial:** ${item.fonte}`;
   }
 
   // 10. Amendoim / Economia
   if (qClean.includes("amendoim") || qClean.includes("capital do amendoim") || qClean.includes("economia")) {
     const cat = kb.categorias.find(c => c.id === "economia");
     const item = cat.itens.find(i => i.palavrasChave.includes("amendoim"));
-    return item.resposta;
+    return `${item.resposta}\n\n📚 **Fonte Oficial:** ${item.fonte}`;
   }
 
   // 11. Fundação e Luiz de Souza Leão
   if (qClean.includes("fundad") || qClean.includes("luiz de souza") || qClean.includes("1929") || qClean.includes("historia")) {
     const cat = kb.categorias.find(c => c.id === "historia");
     const item = cat.itens.find(i => i.palavrasChave.includes("fundacao"));
-    return item.resposta;
+    return `${item.resposta}\n\n📚 **Fonte Oficial:** ${item.fonte}`;
   }
 
   // 12. Busca Semântica em Toda a Base
@@ -371,7 +382,7 @@ function generateLocalResponse(query) {
   }
 
   if (bestMatch && highestScore >= 2) {
-    return bestMatch.resposta;
+    return `${bestMatch.resposta}\n\n📚 **Fonte Oficial:** ${bestMatch.fonte || "Portal Oficial da Prefeitura de Tupã (tupa.sp.gov.br)"}`;
   }
 
   // 13. Resposta Institucional Completa
@@ -382,7 +393,8 @@ function generateLocalResponse(query) {
     `- **Tradição Letã:** O **Distrito de Varpa** e o Museu dos Pioneiros 'Janis Erdbergs'.\n` +
     `- **Ensino Superior:** A prestigiada **FADAP** e a **UNESP (FCE - Tupã)**.\n` +
     `- **Economia:** Liderança como **Capital Nacional do Amendoim** e forte produção avícola.\n\n` +
-    `Se quiser saber algo mais específico sobre qualquer um desses temas, basta digitar sua pergunta!`;
+    `Se quiser saber algo mais específico sobre qualquer um desses temas, basta digitar sua pergunta!\n\n` +
+    `📚 **Fonte Oficial:** Portal Oficial da Prefeitura da Estância Turística de Tupã (tupa.sp.gov.br), IBGE e Acervo Municipal`;
 }
 
 // Normalizador de texto
@@ -471,6 +483,10 @@ function formatMarkdown(text) {
     .replace(/^- (.*$)/gim, '<li>$1</li>');
 
   html = html.replace(/(<li>[\s\S]*?<\/li>)/gm, '<ul>$1</ul>');
+
+  // Destacar caixa de fonte oficial
+  html = html.replace(/📚 \*\*Fonte( Oficial)?:\*\* (.*$)/gim, '<div class="source-box">📚 <strong>Fonte Oficial:</strong> $2</div>');
+
   html = html.replace(/\n\n/g, '<br><br>');
   html = html.replace(/\n/g, '<br>');
 
