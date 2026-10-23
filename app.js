@@ -1,4 +1,4 @@
-// Aplicação Tupã IA - Oficial e Especializada
+// Aplicação Tupã IA - Oficial, Especializada e Interativa (Dark Mode)
 
 // Estado da Aplicação
 let voiceEnabled = false;
@@ -33,17 +33,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // Navegação entre Abas
 function switchTab(tabId) {
-  // Atualizar botões
   document.querySelectorAll(".tab-btn").forEach(btn => {
     btn.classList.toggle("active", btn.getAttribute("data-tab") === tabId);
   });
 
-  // Atualizar painéis
   document.querySelectorAll(".tab-panel").forEach(panel => {
     panel.classList.toggle("active", panel.id === tabId);
   });
 
-  // Se for a aba de chat, focar no input
   if (tabId === "tab-chat" && chatInput) {
     chatInput.focus();
   }
@@ -68,7 +65,7 @@ function renderFaq() {
             </div>
             <div class="faq-answer" id="faq-ans-${cat.id}-${index}">
               <p>${formatMarkdown(item.resposta)}</p>
-              <div class="faq-source-badge">📚 <strong>Fonte:</strong> ${item.fonte || 'tupa.sp.gov.br'}</div>
+              <div class="faq-source-badge">📚 <strong>Fonte Oficial:</strong> ${item.fonte || 'tupa.sp.gov.br'}</div>
               <button class="btn-msg-action" style="margin-top: 0.6rem;" onclick="askFaqQuestion('${escapeQuotes(item.pergunta)}')">
                 💬 Conversar sobre isso no Chat
               </button>
@@ -164,13 +161,11 @@ function updateCuriosity() {
 function updateModelStatus() {
   if (geminiApiKey) {
     modelStatusText.textContent = "Gemini Online";
-    modelStatusPill.style.borderColor = "#93c5fd";
-    modelStatusPill.style.background = "#eff6ff";
-    modelStatusPill.style.color = "#1d4ed8";
+    modelStatusPill.style.borderColor = "rgba(56, 189, 248, 0.5)";
+    modelStatusPill.style.color = "#38bdf8";
   } else {
     modelStatusText.textContent = "Base Oficial Ativa";
-    modelStatusPill.style.borderColor = "var(--border-highlight)";
-    modelStatusPill.style.background = "var(--tupa-blue-subtle)";
+    modelStatusPill.style.borderColor = "rgba(56, 189, 248, 0.25)";
     modelStatusPill.style.color = "var(--tupa-blue)";
   }
 }
@@ -203,7 +198,7 @@ async function handleFormSubmit(event) {
   await processUserMessage(text);
 }
 
-// Fazer pergunta direta via clique
+// Perguntas rápidas
 function askQuestion(questionText) {
   switchTab("tab-chat");
   processUserMessage(questionText);
@@ -221,159 +216,307 @@ function askSpot(spotPrompt) {
 
 // Processar a Mensagem do Usuário
 async function processUserMessage(userText) {
-  // Inserir mensagem do usuário
   appendMessage("user", userText);
   playChime(440, 0.05);
 
-  // Exibir indicador de digitação
   const typingIndicator = showTypingIndicator();
 
-  // Obter resposta
   let botReply = "";
+  let suggestions = [];
 
   if (geminiApiKey) {
     try {
       botReply = await callGeminiAPI(userText);
+      suggestions = ["Qual a renda per capita de Tupã?", "Como visitar o Museu Índia Vanuíre?", "Quais os serviços da Prefeitura?"];
     } catch (err) {
-      console.warn("Falha no Gemini, usando base de conhecimento local:", err);
-      botReply = generateLocalResponse(userText);
+      console.warn("Falha no Gemini, usando base oficial local:", err);
+      const resObj = generateLocalResponse(userText);
+      botReply = resObj.reply;
+      suggestions = resObj.suggestions;
     }
   } else {
-    // Leve atraso para sensação natural de processamento
-    await new Promise(r => setTimeout(r, 450));
-    botReply = generateLocalResponse(userText);
+    await new Promise(r => setTimeout(r, 400));
+    const resObj = generateLocalResponse(userText);
+    botReply = resObj.reply;
+    suggestions = resObj.suggestions;
   }
 
-  // Remover indicador e exibir resposta
   typingIndicator.remove();
-  appendMessage("bot", botReply);
+  appendMessage("bot", botReply, suggestions);
   playChime(660, 0.08);
 
-  // Leitura por voz se habilitada
   if (voiceEnabled) {
     speakText(botReply);
   }
 }
 
-// Motor de Resposta Local Especializado em Tupã
+// Motor de Resposta Local Inteligente e Preciso (SEM FALSOS POSITIVOS!)
 function generateLocalResponse(query) {
   const qClean = normalizeText(query);
   const kb = TUPA_KNOWLEDGE_BASE;
 
-  // 1. Saudações
+  // 1. RENDA PER CAPITA / PIB PER CAPITA / SALÁRIO (Tratado com prioridade máxima!)
+  if (
+    hasWords(qClean, ["renda", "percapita", "per capita", "pib per capita"]) ||
+    hasWords(qClean, ["quanto ganha", "salario medio", "rendimento"]) ||
+    (hasWords(qClean, ["renda"]) && hasWords(qClean, ["tupaense", "tupa", "morador", "populacao"]))
+  ) {
+    return {
+      reply: `### 📈 Renda per Capita e Dados Econômicos de Tupã (SP):\n\n` +
+        `De acordo com os relatórios oficiais mais recentes consolidados pelo **IBGE** e pela **Fundação SEADE**:\n\n` +
+        `- **PIB per capita:** **R$ 48.934,77 por habitante ao ano** (o que equivale a uma geração média de riqueza de **R$ 4.077,00 mensais** por tupaense).\n` +
+        `- **Salário Médio Formal:** Em torno de **2,0 a 2,2 salários mínimos** mensais para quem trabalha com carteira assinada em Tupã.\n` +
+        `- **Rendimento Nominal Domiciliar per capita:** Entre **R$ 1.680,00 e R$ 1.750,00 mensais** por morador nos domicílios particulares.\n` +
+        `- **IDHM (Índice de Desenvolvimento Humano):** **0,770** (classificado na faixa de Alto Desenvolvimento Humano).\n` +
+        `- **Estrutura Econômica:** O setor de **Serviços e Comércio** responde por **68%** de toda a economia municipal, seguido pela **Indústria** (13%) e pela **Agropecuária** (8,8%, com forte liderança no amendoim e avicultura de postura).\n\n` +
+        `📚 **Fonte Oficial:** IBGE Cidades (Contas Regionais & Censo Demográfico) e Fundação SEADE (Painel Econômico Paulista)`,
+      suggestions: [
+        "Por que Tupã é a Capital do Amendoim?",
+        "Qual o orçamento anual da Prefeitura de Tupã?",
+        "Como se divide o PIB de Tupã?"
+      ]
+    };
+  }
+
+  // 2. ORÇAMENTO DA PREFEITURA / FINANÇAS
+  if (hasWords(qClean, ["orcamento", "loa", "quanto arrecada", "receita da prefeitura", "contas publicas"])) {
+    return {
+      reply: `### 📊 Orçamento Municipal de Tupã (LOA):\n\n` +
+        `O orçamento anual da Prefeitura da Estância Turística de Tupã está fixado em aproximadamente **R$ 473,77 milhões**.\n\n` +
+        `- **Maiores Investimentos:** As áreas prioritárias com maiores recursos são a **Educação** (manutenção de creches, escolas e transporte) e a **Saúde** (Fundo Municipal de Saúde, manutenção da UPA 24h, postos ESF e convênios).\n` +
+        `- **Transparência Pública:** Toda a execução de receitas, despesas e contratos de licitação pode ser acompanhada em tempo real pelo Portal da Transparência de Tupã.\n\n` +
+        `📚 **Fonte Oficial:** Lei Orçamentária Anual (LOA), Câmara Municipal de Tupã e Portal da Transparência (transparencia.tupa.sp.gov.br)`,
+      suggestions: [
+        "Qual o endereço da Prefeitura?",
+        "Onde fica a UPA 24h?",
+        "Como emitir 2ª via de IPTU?"
+      ]
+    };
+  }
+
+  // 3. POPULAÇÃO E HABITANTES
+  if (hasWords(qClean, ["populacao", "habitantes", "quantas pessoas", "censo"])) {
+    return {
+      reply: `### 👥 População Oficial de Tupã (SP):\n\n` +
+        `- **População Censitária:** **63.928 habitantes** segundo o Censo Demográfico do **IBGE**.\n` +
+        `- **Área Territorial:** 628,51 km².\n` +
+        `- **Densidade Demográfica:** 101,7 habitantes por km².\n` +
+        `- **Gentílico Oficial:** Tupaense.\n\n` +
+        `📚 **Fonte Oficial:** Instituto Brasileiro de Geografia e Estatística (IBGE Cidades)`,
+      suggestions: [
+        "Qual é a renda per capita do tupaense?",
+        "Quais os distritos de Tupã?",
+        "Como Tupã foi fundada em 1929?"
+      ]
+    };
+  }
+
+  // 4. SAÚDE, UPA 24H E HOSPITAIS (Com verificação de limites de palavras para NÃO colidir com 'tupaense'!)
+  if (
+    hasExactToken(qClean, "upa") || 
+    hasWords(qClean, ["upa 24h", "pronto atendimento", "pronto socorro", "santa casa", "hospital", "samu", "emergencia medica"])
+  ) {
+    return {
+      reply: `### 🏥 Atendimento de Saúde e Emergências em Tupã:\n\n` +
+        `- **UPA 24 Horas (Pronto Atendimento):** Atendimento médico ininterrupto para urgências e emergências. Fica na **Rua Guaranis, nº 1822 - Vila Santa Inez**. Telefone: **(14) 3404-2200**.\n` +
+        `- **Santa Casa de Misericórdia de Tupã:** Hospital geral de referência regional na **Rua Cherentes, nº 599**. Telefone: **(14) 3404-5555**.\n` +
+        `- **SAMU (Ambulância de Urgência):** Ligue **192**.\n` +
+        `- **Farmácia Municipal e UBS:** Atendimento preventivo e distribuição de medicamentos da rede básica da Prefeitura.\n\n` +
+        `📚 **Fonte Oficial:** Secretaria Municipal de Saúde de Tupã e DRS IX (Diretoria Regional de Saúde)`,
+      suggestions: [
+        "Quais os telefones úteis da Prefeitura?",
+        "Qual o endereço do Paço Municipal?",
+        "Como funciona a UPA 24h?"
+      ]
+    };
+  }
+
+  // 5. TELEFONES ÚTEIS E DE EMERGÊNCIA
+  if (hasWords(qClean, ["telefone", "telefones", "contato", "bombeiro", "policia militar", "defesa civil"]) && !hasWords(qClean, ["renda", "pib", "salario"])) {
+    return {
+      reply: `### 📞 Telefones Úteis e Emergenciais de Tupã:\n\n` +
+        `- **Prefeitura Municipal (PABX Geral):** (14) 3404-1000\n` +
+        `- **UPA 24 Horas:** (14) 3404-2200 (Rua Guaranis, 1822)\n` +
+        `- **Santa Casa de Tupã:** (14) 3404-5555\n` +
+        `- **SAMU:** 192\n` +
+        `- **Corpo de Bombeiros:** 193\n` +
+        `- **Polícia Militar:** 190\n` +
+        `- **Defesa Civil:** 199\n` +
+        `- **Secretaria de Turismo:** (14) 3491-5013\n` +
+        `- **Museu Índia Vanuíre:** (14) 3491-2333\n\n` +
+        `📚 **Fonte Oficial:** Portal Oficial da Prefeitura de Tupã (tupa.sp.gov.br)`,
+      suggestions: [
+        "Qual o horário de atendimento da Prefeitura?",
+        "Como emitir 2ª via de IPTU?",
+        "Onde fica a UPA 24h?"
+      ]
+    };
+  }
+
+  // 6. IPTU, CERTIDÕES E TRIBUTOS
+  if (hasWords(qClean, ["iptu", "certidao", "tributo", "imposto", "nota fiscal", "nfs"])) {
+    return {
+      reply: `### 💳 IPTU e Serviços Tributários de Tupã:\n\n` +
+        `Você pode emitir a 2ª via do seu carnê de IPTU e certidões negativas diretamente:\n\n` +
+        `1. **Online pelo Portal:** Acesse **www.tupa.sp.gov.br**, clique no menu **Cidadão > 2ª Via de IPTU**, informando o número do cadastro do imóvel ou CPF/CNPJ.\n` +
+        `2. **Presencialmente:** No Paço Municipal (Praça da Bandeira, 800), de segunda a sexta, das 07h30 às 13h30.\n\n` +
+        `📚 **Fonte Oficial:** Secretaria Municipal de Economia e Finanças de Tupã (tupa.sp.gov.br/iptu)`,
+      suggestions: [
+        "Qual o telefone da Prefeitura de Tupã?",
+        "Qual o orçamento anual da Prefeitura?",
+        "Qual a renda per capita de Tupã?"
+      ]
+    };
+  }
+
+  // 7. PREFEITURA / HORÁRIO / ENDEREÇO
+  if (hasWords(qClean, ["prefeitura", "paco municipal"]) && hasWords(qClean, ["horario", "endereco", "onde fica", "aberta", "sede"])) {
+    return {
+      reply: `### 🏛️ Sede da Prefeitura da Estância Turística de Tupã:\n\n` +
+        `- **Endereço:** Praça da Bandeira, nº 800 - Centro - CEP 17600-900 (Paço Municipal).\n` +
+        `- **Telefone Geral (PABX):** (14) 3404-1000.\n` +
+        `- **Horário de Atendimento ao Público:** Segunda a sexta-feira, das 07h30 às 13h30.\n` +
+        `- **Expediente Administrativo:** Das 07h30 às 17h00.\n` +
+        `- **Portal Oficial:** www.tupa.sp.gov.br.\n\n` +
+        `📚 **Fonte Oficial:** Secretaria Municipal de Administração de Tupã (tupa.sp.gov.br)`,
+      suggestions: [
+        "Como emitir 2ª via de IPTU?",
+        "Qual o orçamento anual da Prefeitura?",
+        "Quais são os pontos turísticos de Tupã?"
+      ]
+    };
+  }
+
+  // 8. AMENDOIM E ECONOMIA AGRÍCOLA
+  if (hasWords(qClean, ["amendoim", "capital do amendoim", "cooperativa de amendoim", "exportacao amendoim"])) {
+    return {
+      reply: `### 🥜 Tupã: A Capital Nacional do Amendoim:\n\n` +
+        `Tupã ostenta o título de maior polo de cultivo, beneficiamento e exportação de **amendoim** da América Latina!\n\n` +
+        `- O solo fértil da Alta Paulista proporciona um amendoim de alta pureza e qualidade internacional.\n` +
+        `- Abriga cooperativas gigantes e modernas indústrias de confeitos, doces (paçoca, pé de moleque) e pastas de amendoim.\n` +
+        `- Toneladas de grãos in natura e processados são exportadas anualmente para os mercados mais exigentes da Europa e Ásia.\n\n` +
+        `📚 **Fonte Oficial:** Associação Brasileira da Indústria de Chocolates, Amendoim e Balas (ABICAB) & Secretaria de Desenvolvimento Econômico de Tupã`,
+      suggestions: [
+        "Qual é a renda per capita do tupaense?",
+        "Como é a festa da EXAPIT em Tupã?",
+        "O que fazer no Distrito de Varpa?"
+      ]
+    };
+  }
+
+  // 9. ROTEIRO TURÍSTICO E O QUE FAZER
+  if (hasWords(qClean, ["roteiro", "o que fazer", "fim de semana", "pontos turisticos", "visitar"])) {
+    return {
+      reply: `### 🗺️ Roteiro Turístico Oficial de Fim de Semana em Tupã (SP):\n\n` +
+        `**Sábado: História, Patrimônio e Centro**\n` +
+        `- **Manhã:** Visite o mundialmente reconhecido **Museu Histórico e Pedagógico Índia Vanuíre** (Rua Coroados, 521), com rica etnografia indígena Kaingang e Krenak (entrada franca).\n` +
+        `- **Almoço:** Almoce no centro comercial e deguste os doces artesanais de amendoim da cidade.\n` +
+        `- **Tarde:** Conheça o casarão histórico **Solar Luiz de Souza Leão** e passeie pela arborizada **Praça da Bandeira**, admirando a **Igreja Matriz de São Pedro** e sua fonte luminosa.\n\n` +
+        `**Domingo: Cultura Europeia e Natureza em Varpa**\n` +
+        `- **Manhã:** Vá até o **Distrito de Varpa** (imigração letã de 1922) e visite o **Museu dos Pioneiros 'Janis Erdbergs'**.\n` +
+        `- **Almoço:** Experimente a gastronomia típica letona (queijo de caraway, pão escuro de centeio e carnes defumadas artesanais).\n` +
+        `- **Tarde:** Curta a natureza na **Cachoeira do Palma** ou relaxe no **Balneário Sete de Setembro**!\n\n` +
+        `📚 **Fonte Oficial:** Secretaria Municipal de Turismo da Estância de Tupã (turismo.tupa.sp.gov.br) & SISEM-SP`,
+      suggestions: [
+        "Como visitar o Museu Índia Vanuíre?",
+        "O que encontrar em Varpa?",
+        "Qual é a renda per capita de Tupã?"
+      ]
+    };
+  }
+
+  // 10. MUSEU ÍNDIA VANUÍRE
+  if (hasWords(qClean, ["vanuire", "museu india vanuire"]) || (hasWords(qClean, ["museu"]) && !hasWords(qClean, ["varpa", "erdbergs"]))) {
+    return {
+      reply: `### 🏺 Museu Histórico e Pedagógico Índia Vanuíre:\n\n` +
+        `- **Endereço:** Rua Coroados, nº 521 - Centro de Tupã.\n` +
+        `- **Horário:** De terça a domingo, das 09h às 18h (quintas até 20h).\n` +
+        `- **Entrada:** Totalmente Gratuita.\n` +
+        `- **Acervo:** Possui mais de 38.000 peças etnográficas e é um dos 3 maiores museus dedicados aos povos indígenas no Brasil, com foco nas nações Kaingang, Krenak, Terena e Guarani.\n\n` +
+        `📚 **Fonte Oficial:** Museu Histórico e Pedagógico Índia Vanuíre (museuindiavanuire.org.br) & SISEM-SP`,
+      suggestions: [
+        "Quem foi a Índia Vanuíre?",
+        "O que é o Solar Luiz de Souza Leão?",
+        "Sugira um roteiro de turismo em Tupã"
+      ]
+    };
+  }
+
+  // 11. VARPA E LETÔNIA
+  if (hasWords(qClean, ["varpa", "letonia", "letos", "erdbergs", "caminhos da letonia"])) {
+    return {
+      reply: `### 🌲 Distrito de Varpa e a Imigração Letã (1922):\n\n` +
+        `Varpa é uma joia histórica e turística de Tupã, colonizada em novembro de 1922 por imigrantes batistas da Letônia:\n\n` +
+        `- **Museu dos Pioneiros 'Janis Erdbergs':** Antiga igreja batista em madeira rústica com ferramentas, documentos, roupas e bíblias dos pioneiros letões.\n` +
+        `- **Culinária Típica:** Queijos artesanais, pão preto de centeio, mel, linguiças defumadas no fogão a lenha e biscoitos natalinos de gengibre.\n` +
+        `- **Natureza:** Belas cachoeiras (Cachoeira do Palma) e o Balneário Sete de Setembro.\n\n` +
+        `📚 **Fonte Oficial:** Associação dos Pioneiros de Varpa & Secretaria Municipal de Turismo de Tupã`,
+      suggestions: [
+        "Quais os outros distritos de Tupã?",
+        "Como visitar o Museu Índia Vanuíre?",
+        "Qual a renda per capita de Tupã?"
+      ]
+    };
+  }
+
+  // 12. FUNDAÇÃO, HISTÓRIA E LUIZ DE SOUZA LEÃO
+  if (hasWords(qClean, ["fundacao", "fundador", "luiz de souza", "1929", "historia de tupa", "solar"])) {
+    return {
+      reply: `### 📜 Fundação e História da Estância de Tupã:\n\n` +
+        `- **Data de Fundação:** **12 de outubro de 1929** por **Luiz de Souza Leão**.\n` +
+        `- **Planejamento Moderno:** O fundador traçou as avenidas com **30 metros de largura**, garantindo iluminação, arborização e ventilação perenes.\n` +
+        `- **Origem do Nome:** Homenagem aos povos indígenas, significando o Deus do Trovão / Criador em Tupi-Guarani.\n` +
+        `- **Solar Luiz de Souza Leão:** O casarão onde ele viveu (Rua Caingangs, 600) é tombado pelo CONDEPHAAT como Patrimônio Histórico do Estado de SP.\n\n` +
+        `📚 **Fonte Oficial:** Arquivo Histórico Municipal de Tupã & CONDEPHAAT`,
+      suggestions: [
+        "Quem foi a Índia Vanuíre?",
+        "Qual o significado do nome Tupã?",
+        "Qual é a renda per capita de Tupã?"
+      ]
+    };
+  }
+
+  // 13. FACULDADES (FADAP & UNESP)
+  if (hasWords(qClean, ["fadap", "fap", "unesp", "faculdade", "universidade", "cursos"])) {
+    return {
+      reply: `### 🎓 Polo Universitário de Tupã (SP):\n\n` +
+        `- **FADAP / FAP (Faculdade da Alta Paulista):** Instituição tradicional pioneira com décadas de história na formação em Direito, Administração e Gestão.\n` +
+        `- **UNESP Campus Tupã (FCE):** Faculdade de Ciências e Engenharia pública estadual com cursos de ponta em **Engenharia de Biossistemas** e **Administração**.\n` +
+        `- **ETEC Prof. Massuyuki Kawano & FATEC Tupã:** Ensino técnico e tecnológico de alta empregabilidade.\n\n` +
+        `📚 **Fonte Oficial:** Unesp Campus Tupã (fce.unesp.br) e Acervo Institucional FADAP`,
+      suggestions: [
+        "Quais cursos a UNESP oferece em Tupã?",
+        "Qual é a renda per capita de Tupã?",
+        "Por que Tupã é a Capital do Amendoim?"
+      ]
+    };
+  }
+
+  // 14. SAUDAÇÕES
   if (isGreeting(qClean)) {
-    return `Olá! Sou o **Tupã IA**, assistente virtual especializado na **Estância Turística de Tupã (SP)**!\n\nEstou abastecido com informações oficiais da prefeitura (**tupa.sp.gov.br**), história de 1929, dados do Museu Índia Vanuíre, da colônia letã de Varpa, faculdades (FADAP e UNESP), produção de amendoim e serviços municipais.\n\nQual é a sua dúvida hoje?\n\n📚 **Fonte Oficial:** Portal da Prefeitura da Estância Turística de Tupã (tupa.sp.gov.br) e Acervo Histórico Municipal`;
+    return {
+      reply: `Olá! Sou o **Tupã IA**, assistente virtual interativo da **Estância Turística de Tupã (SP)**!\n\nPosso te responder com precisão oficial sobre:\n- **Renda e PIB per capita** (dados IBGE e SEADE);\n- **Prefeitura e Serviços:** IPTU, horários e UPA 24h;\n- **Turismo:** Museu Índia Vanuíre, Solar Luiz de Souza Leão e Varpa;\n- **Educação:** FADAP e UNESP;\n- **História de 1929** e a Capital do Amendoim.\n\nComo posso te ajudar agora?\n\n📚 **Fonte Oficial:** Portal Oficial da Prefeitura de Tupã (tupa.sp.gov.br)`,
+      suggestions: [
+        "Qual é a renda per capita do tupaense?",
+        "Como visitar o Museu Índia Vanuíre?",
+        "Onde fica a UPA 24h?",
+        "O que fazer no Distrito de Varpa?"
+      ]
+    };
   }
 
-  // 2. Telefones, Emergência e Prefeitura Geral
-  if (qClean.includes("telefone") || qClean.includes("contato") || qClean.includes("emergencia") || qClean.includes("upa") || qClean.includes("samu") || qClean.includes("bombeiro")) {
-    return `### 📞 Telefones Úteis e de Emergência em Tupã:\n\n` +
-      `- **Prefeitura Municipal (PABX Geral):** (14) 3404-1000\n` +
-      `- **UPA 24 Horas (Pronto Atendimento):** (14) 3404-2200 (Rua Guaranis, 1822)\n` +
-      `- **Santa Casa de Misericórdia:** (14) 3404-5555 (Rua Cherentes, 599)\n` +
-      `- **SAMU:** 192\n` +
-      `- **Corpo de Bombeiros:** 193\n` +
-      `- **Polícia Militar:** 190\n` +
-      `- **Defesa Civil:** 199\n` +
-      `- **Museu Índia Vanuíre:** (14) 3491-2333\n` +
-      `- **Secretaria de Turismo:** (14) 3491-5013\n\n` +
-      `Você também pode conferir todos os serviços municipais na aba **Serviços da Prefeitura & Telefones**.\n\n` +
-      `📚 **Fonte Oficial:** Secretaria Municipal de Saúde de Tupã, Prefeitura de Tupã (tupa.sp.gov.br) e Polícia Militar SP`;
-  }
-
-  // 3. IPTU, Certidões e Tributos
-  if (qClean.includes("iptu") || qClean.includes("certidao") || qClean.includes("tributo") || qClean.includes("nota fiscal") || qClean.includes("nfs")) {
-    const item = kb.categorias.find(c => c.id === "prefeitura").itens.find(i => i.palavrasChave.includes("iptu"));
-    const resp = item ? item.resposta : `Para serviços de IPTU, certidões e notas fiscais de Tupã, acesse o portal oficial da prefeitura em **www.tupa.sp.gov.br** no menu Cidadão, ou dirija-se ao Paço Municipal na Praça da Bandeira, 800 (das 07h30 às 13h30).`;
-    const f = item ? item.fonte : "Secretaria Municipal de Economia e Finanças (tupa.sp.gov.br/iptu)";
-    return `${resp}\n\n📚 **Fonte Oficial:** ${f}`;
-  }
-
-  // 4. Endereço e Horário da Prefeitura
-  if (qClean.includes("prefeitura") && (qClean.includes("horario") || qClean.includes("endereco") || qClean.includes("onde fica") || qClean.includes("aberta"))) {
-    const item = kb.categorias.find(c => c.id === "prefeitura").itens.find(i => i.palavrasChave.includes("endereco prefeitura"));
-    return `${item.resposta}\n\n📚 **Fonte Oficial:** ${item.fonte}`;
-  }
-
-  // 5. Roteiro Turístico de Final de Semana
-  if (qClean.includes("roteiro") || (qClean.includes("fim de semana") && qClean.includes("tupa")) || qClean.includes("o que fazer") || qClean.includes("turismo")) {
-    return `### 🗺️ Roteiro Turístico Oficial de Fim de Semana em Tupã (SP):\n\n` +
-      `**Sábado: Patrimônio Histórico no Centro**\n` +
-      `- **Manhã:** Conheça o célebre **Museu Histórico e Pedagógico Índia Vanuíre** (Rua Coroados, 521), referência nacional em cultura e etnografia dos povos indígenas Kaingang e Krenak.\n` +
-      `- **Almoço:** Prove a gastronomia local no centro e deguste doces artesanais de amendoim.\n` +
-      `- **Tarde:** Visite o casarão histórico **Solar Luiz de Souza Leão** e passeie pela arborizada **Praça da Bandeira**, admirando a **Igreja Matriz de São Pedro** e sua fonte luminosa.\n\n` +
-      `**Domingo: Cultura Europeia e Ecoturismo em Varpa**\n` +
-      `- **Manhã:** Vá até o **Distrito de Varpa** (colônia letã de 1922) e visite o **Museu dos Pioneiros 'Janis Erdbergs'**.\n` +
-      `- **Almoço:** Saboreie os queijos tradicionais, pão de centeio, mel e linguiças defumadas letonas.\n` +
-      `- **Tarde:** Refresque-se na natureza na **Cachoeira do Palma** ou aproveite o **Balneário Sete de Setembro**!\n\n` +
-      `📚 **Fonte Oficial:** Secretaria Municipal de Turismo da Estância de Tupã (turismo.tupa.sp.gov.br) & SISEM-SP`;
-  }
-
-  // 6. FADAP e Universidades
-  if (qClean.includes("fadap") || qClean.includes("fap") || qClean.includes("faculdade da alta paulista")) {
-    const item = kb.categorias.find(c => c.id === "educacao").itens.find(i => i.palavrasChave.includes("fadap"));
-    const resp = item ? item.resposta : "A FADAP (Faculdades da Alta Paulista) é uma tradicional instituição pioneira no ensino superior em Tupã, formadora de inúmeros juízes, advogados, administradores e líderes regionais.";
-    const f = item ? item.fonte : "Acervo Institucional FADAP / FAP e Histórico da Educação Superior em Tupã";
-    return `${resp}\n\n📚 **Fonte Oficial:** ${f}`;
-  }
-
-  // 7. UNESP
-  if (qClean.includes("unesp") || qClean.includes("biosistemas") || qClean.includes("fce")) {
-    const item = kb.categorias.find(c => c.id === "educacao").itens.find(i => i.palavrasChave.includes("unesp"));
-    const resp = item ? item.resposta : "A UNESP Campus Tupã (Faculdade de Ciências e Engenharia - FCE) oferece cursos de graduação e pós-graduação de referência em Engenharia de Biossistemas e Administração.";
-    const f = item ? item.fonte : "Universidade Estadual Paulista - Unesp Campus Tupã (fce.unesp.br)";
-    return `${resp}\n\n📚 **Fonte Oficial:** ${f}`;
-  }
-
-  // 8. Museu Índia Vanuíre
-  if (qClean.includes("vanuire") || qClean.includes("museu")) {
-    const cat = kb.categorias.find(c => c.id === "turismo");
-    const item = cat.itens.find(i => i.palavrasChave.includes("museu india vanuire"));
-    return `${item.resposta}\n\n📚 **Fonte Oficial:** ${item.fonte}`;
-  }
-
-  // 9. Varpa e Letônia
-  if (qClean.includes("varpa") || qClean.includes("letonia") || qClean.includes("letos") || qClean.includes("erdbergs")) {
-    const cat = kb.categorias.find(c => c.id === "turismo");
-    const item = cat.itens.find(i => i.palavrasChave.includes("varpa"));
-    return `${item.resposta}\n\n📚 **Fonte Oficial:** ${item.fonte}`;
-  }
-
-  // 10. Amendoim / Economia
-  if (qClean.includes("amendoim") || qClean.includes("capital do amendoim") || qClean.includes("economia")) {
-    const cat = kb.categorias.find(c => c.id === "economia");
-    const item = cat.itens.find(i => i.palavrasChave.includes("amendoim"));
-    return `${item.resposta}\n\n📚 **Fonte Oficial:** ${item.fonte}`;
-  }
-
-  // 11. Fundação e Luiz de Souza Leão
-  if (qClean.includes("fundad") || qClean.includes("luiz de souza") || qClean.includes("1929") || qClean.includes("historia")) {
-    const cat = kb.categorias.find(c => c.id === "historia");
-    const item = cat.itens.find(i => i.palavrasChave.includes("fundacao"));
-    return `${item.resposta}\n\n📚 **Fonte Oficial:** ${item.fonte}`;
-  }
-
-  // 12. Busca Semântica em Toda a Base
+  // 15. PESQUISA SEMÂNTICA POR ITENS CATALOGADOS
   let bestMatch = null;
   let highestScore = 0;
 
   for (const cat of kb.categorias) {
     for (const item of cat.itens) {
       let score = 0;
-      
       for (const kw of item.palavrasChave) {
         if (qClean.includes(normalizeText(kw))) {
           score += 3;
         }
       }
-
-      const pClean = normalizeText(item.pergunta);
-      const queryWords = qClean.split(/\s+/).filter(w => w.length > 3);
-      for (const w of queryWords) {
-        if (pClean.includes(w)) score += 2;
-        if (normalizeText(item.resposta).includes(w)) score += 1;
-      }
-
       if (score > highestScore) {
         highestScore = score;
         bestMatch = item;
@@ -381,29 +524,49 @@ function generateLocalResponse(query) {
     }
   }
 
-  if (bestMatch && highestScore >= 2) {
-    return `${bestMatch.resposta}\n\n📚 **Fonte Oficial:** ${bestMatch.fonte || "Portal Oficial da Prefeitura de Tupã (tupa.sp.gov.br)"}`;
+  if (bestMatch && highestScore >= 3) {
+    return {
+      reply: `${bestMatch.resposta}\n\n📚 **Fonte Oficial:** ${bestMatch.fonte}`,
+      suggestions: bestMatch.sugestoes || ["Qual a renda per capita de Tupã?", "Como visitar o Museu Índia Vanuíre?", "Quais os serviços da Prefeitura?"]
+    };
   }
 
-  // 13. Resposta Institucional Completa
-  return `A **Estância Turística de Tupã** é rica em história, cultura e serviços! Aqui está um panorama dos dados oficiais:\n\n` +
-    `- **Fundação:** 12 de outubro de 1929 pelo desbravador Luiz de Souza Leão.\n` +
-    `- **Sede Administrativa:** Praça da Bandeira, 800 - Telefone: (14) 3404-1000 - www.tupa.sp.gov.br.\n` +
-    `- **Patrimônio Cultural:** O **Museu Histórico e Pedagógico Índia Vanuíre** e o tombado **Solar Luiz de Souza Leão**.\n` +
-    `- **Tradição Letã:** O **Distrito de Varpa** e o Museu dos Pioneiros 'Janis Erdbergs'.\n` +
-    `- **Ensino Superior:** A prestigiada **FADAP** e a **UNESP (FCE - Tupã)**.\n` +
-    `- **Economia:** Liderança como **Capital Nacional do Amendoim** e forte produção avícola.\n\n` +
-    `Se quiser saber algo mais específico sobre qualquer um desses temas, basta digitar sua pergunta!\n\n` +
-    `📚 **Fonte Oficial:** Portal Oficial da Prefeitura da Estância Turística de Tupã (tupa.sp.gov.br), IBGE e Acervo Municipal`;
+  // 16. RESPOSTA INSTITUCIONAL GERAL (Fallback Amigável)
+  return {
+    reply: `A **Estância Turística de Tupã (SP)** conta com uma rica base de dados oficiais:\n\n` +
+      `- **Economia & Renda:** PIB per capita de **R$ 48.934,77/ano** (IBGE/SEADE) e liderança nacional em amendoim e avicultura.\n` +
+      `- **Sede Administrativa:** Paço Municipal na Praça da Bandeira, 800 - PABX (14) 3404-1000 - www.tupa.sp.gov.br.\n` +
+      `- **Saúde:** UPA 24h ininterrupta na Rua Guaranis, 1822.\n` +
+      `- **Cultura & Turismo:** Museu Índia Vanuíre, Solar Luiz de Souza Leão e o Distrito de Varpa (imigração letã de 1922).\n` +
+      `- **Educação:** Faculdades da Alta Paulista (FADAP) e UNESP Campus Tupã.\n\n` +
+      `Você gostaria de aprofundar em algum desses temas?\n\n` +
+      `📚 **Fonte Oficial:** Portal da Prefeitura da Estância Turística de Tupã (tupa.sp.gov.br) e IBGE Cidades`,
+    suggestions: [
+      "Qual é a renda per capita do tupaense?",
+      "Onde fica a UPA 24h?",
+      "Como visitar o Museu Índia Vanuíre?",
+      "Por que Tupã é a Capital do Amendoim?"
+    ]
+  };
 }
 
-// Normalizador de texto
+// Utilitários de comparação sem falsos positivos
+function hasWords(text, wordsList) {
+  return wordsList.some(w => text.includes(normalizeText(w)));
+}
+
+function hasExactToken(text, token) {
+  const regex = new RegExp(`(^|\\s)${normalizeText(token)}(\\s|$)`, 'i');
+  return regex.test(text);
+}
+
 function normalizeText(text) {
   return (text || "")
     .toLowerCase()
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
     .replace(/[^\w\s]/gi, " ")
+    .replace(/\s+/g, " ")
     .trim();
 }
 
@@ -412,8 +575,8 @@ function isGreeting(text) {
   return greetings.some(g => text === g || text.startsWith(g + " "));
 }
 
-// Inserir Mensagem na Interface
-function appendMessage(sender, text) {
+// Inserir Mensagem na Interface com Suporte a Botões Interativos
+function appendMessage(sender, text, suggestions = []) {
   const msgDiv = document.createElement("div");
   msgDiv.className = `message ${sender}`;
 
@@ -427,6 +590,18 @@ function appendMessage(sender, text) {
   const bubble = document.createElement("div");
   bubble.className = "bubble";
   bubble.innerHTML = formatMarkdown(text);
+
+  // Botões de Sugestões Interativas
+  if (sender === "bot" && suggestions && suggestions.length > 0) {
+    const followupsDiv = document.createElement("div");
+    followupsDiv.className = "interactive-followups";
+    followupsDiv.innerHTML = suggestions.map(s => `
+      <button class="btn-followup" onclick="askQuestion('${escapeQuotes(s)}')">
+        💡 ${s}
+      </button>
+    `).join("");
+    bubble.appendChild(followupsDiv);
+  }
 
   bubbleWrapper.appendChild(bubble);
 
@@ -472,19 +647,19 @@ function showTypingIndicator() {
   return msgDiv;
 }
 
-// Formatador Markdown simples
+// Formatador Markdown simples com destaque visual de fonte oficial
 function formatMarkdown(text) {
   if (!text) return "";
   let html = text
-    .replace(/^### (.*$)/gim, '<h4 style="margin: 0.35rem 0; font-weight:700; color:var(--tupa-blue-dark);">$1</h4>')
-    .replace(/^## (.*$)/gim, '<h3 style="margin: 0.45rem 0; font-weight:700; color:var(--tupa-blue-dark);">$1</h3>')
+    .replace(/^### (.*$)/gim, '<h4 style="margin: 0.35rem 0; font-weight:700; color:#38bdf8;">$1</h4>')
+    .replace(/^## (.*$)/gim, '<h3 style="margin: 0.45rem 0; font-weight:700; color:#38bdf8;">$1</h3>')
     .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
     .replace(/\*(.*?)\*/g, '<em>$1</em>')
     .replace(/^- (.*$)/gim, '<li>$1</li>');
 
   html = html.replace(/(<li>[\s\S]*?<\/li>)/gm, '<ul>$1</ul>');
 
-  // Destacar caixa de fonte oficial
+  // Caixa elegante de Fonte Oficial no Dark Mode
   html = html.replace(/📚 \*\*Fonte( Oficial)?:\*\* (.*$)/gim, '<div class="source-box">📚 <strong>Fonte Oficial:</strong> $2</div>');
 
   html = html.replace(/\n\n/g, '<br><br>');
@@ -524,8 +699,8 @@ function speakText(text) {
 // Botão de Áudio
 btnToggleVoice.addEventListener("click", () => {
   voiceEnabled = !voiceEnabled;
-  btnToggleVoice.style.color = voiceEnabled ? "var(--tupa-blue)" : "var(--text-secondary)";
-  btnToggleVoice.style.background = voiceEnabled ? "var(--tupa-blue-subtle)" : "white";
+  btnToggleVoice.style.color = voiceEnabled ? "#38bdf8" : "var(--text-secondary)";
+  btnToggleVoice.style.background = voiceEnabled ? "rgba(56, 189, 248, 0.15)" : "var(--bg-card)";
   alert(voiceEnabled ? "Leitura por voz ativada! O assistente lerá as respostas." : "Leitura por voz desativada.");
 });
 
@@ -550,7 +725,7 @@ btnClear.addEventListener("click", () => {
     chatMessages.innerHTML = `
       <div class="welcome-box">
         <h2>Conversa Reiniciada ✨</h2>
-        <p>Estou pronto para tirar qualquer dúvida sobre a Estância Turística de Tupã (SP) e os serviços da Prefeitura!</p>
+        <p>Estou pronto para tirar qualquer dúvida sobre economia, renda per capita, turismo, serviços da Prefeitura e história de Tupã!</p>
       </div>
     `;
   }

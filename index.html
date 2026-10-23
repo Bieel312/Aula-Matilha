@@ -88,17 +88,18 @@
             <!-- Hero de Boas-Vindas com Sugestões -->
             <div class="welcome-box">
               <h2>👋 Bem-vindo ao Tupã IA!</h2>
-              <p>Olá! Sou o assistente especializado na <strong>Estância Turística de Tupã (SP)</strong>, abastecido com as informações do portal oficial da Prefeitura (<strong>tupa.sp.gov.br</strong>), dados históricos e patrimoniais. Você pode fazer <strong>qualquer pergunta própria</strong> abaixo ou clicar em uma das sugestões rápidas!</p>
+              <p>Olá! Sou o assistente virtual oficial e interativo da <strong>Estância Turística de Tupã (SP)</strong>, abastecido com as informações do portal da Prefeitura (<strong>tupa.sp.gov.br</strong>), dados do <strong>IBGE</strong>, <strong>Fundação SEADE</strong> e acervo histórico. Você pode fazer <strong>qualquer pergunta própria</strong> abaixo com citação da fonte garantida!</p>
               
-              <div class="chips-title">Dúvidas Frequentes para começar:</div>
+              <div class="chips-title">Sugestões rápidas para perguntar:</div>
               <div class="quick-chips">
-                <button class="chip" onclick="askQuestion('Como Tupã foi fundada e quem foi Luiz de Souza Leão?')">📜 Fundação e 1929</button>
+                <button class="chip" onclick="askQuestion('Qual é a renda per capita e o PIB per capita do tupaense?')">📈 Renda per capita & PIB</button>
+                <button class="chip" onclick="askQuestion('Qual o orçamento anual da Prefeitura de Tupã?')">📊 Orçamento Municipal</button>
+                <button class="chip" onclick="askQuestion('Onde fica a UPA 24h e quais os telefones de emergência?')">🏥 UPA 24h & Saúde</button>
                 <button class="chip" onclick="askQuestion('Como visitar o Museu Índia Vanuíre? Quais os horários e acervo?')">🏺 Museu Índia Vanuíre</button>
-                <button class="chip" onclick="askQuestion('O que conhecer no Distrito de Varpa e a colônia letã?')">🌲 Imigração Letã em Varpa</button>
-                <button class="chip" onclick="askQuestion('Quais faculdades existem em Tupã? Como é a FADAP e a UNESP?')">🎓 Faculdades (FADAP & UNESP)</button>
+                <button class="chip" onclick="askQuestion('O que conhecer no Distrito de Varpa e a colônia letã?')">🌲 Distrito de Varpa</button>
                 <button class="chip" onclick="askQuestion('Por que Tupã é a Capital Nacional do Amendoim?')">🥜 Capital do Amendoim</button>
-                <button class="chip" onclick="askQuestion('Onde fica a UPA 24h e quais os telefones de emergência?')">🏥 UPA 24h & Telefones Úteis</button>
-                <button class="chip" onclick="askQuestion('Sugira um roteiro de turismo para passar um fim de semana em Tupã')">🗺️ Roteiro Turístico</button>
+                <button class="chip" onclick="askQuestion('Como Tupã foi fundada e quem foi Luiz de Souza Leão?')">📜 Fundação e 1929</button>
+                <button class="chip" onclick="askQuestion('Quais faculdades existem em Tupã? Como é a FADAP e a UNESP?')">🎓 FADAP & UNESP</button>
               </div>
             </div>
 
@@ -133,7 +134,19 @@
         <!-- Painel Lateral: Ficha da Estância & Curiosidades -->
         <aside class="chat-sidebar">
           <div class="side-card">
-            <h3>🏛️ Estância Turística de Tupã</h3>
+            <h3>🏛️ Ficha Oficial de Tupã</h3>
+            <div class="fact-item">
+              <span class="fact-label">PIB per capita:</span>
+              <span class="fact-value" style="color: #38bdf8;">R$ 48.934,77</span>
+            </div>
+            <div class="fact-item">
+              <span class="fact-label">População (Censo):</span>
+              <span class="fact-value">63.928 hab.</span>
+            </div>
+            <div class="fact-item">
+              <span class="fact-label">Salário Médio:</span>
+              <span class="fact-value">~2,2 sal. mín.</span>
+            </div>
             <div class="fact-item">
               <span class="fact-label">Fundação:</span>
               <span class="fact-value">12/10/1929</span>
@@ -143,20 +156,16 @@
               <span class="fact-value">Luiz de Souza Leão</span>
             </div>
             <div class="fact-item">
-              <span class="fact-label">População:</span>
-              <span class="fact-value">~65.000 hab.</span>
-            </div>
-            <div class="fact-item">
-              <span class="fact-label">Região:</span>
-              <span class="fact-value">Alta Paulista (SP)</span>
-            </div>
-            <div class="fact-item">
-              <span class="fact-label">Padroeiro:</span>
-              <span class="fact-value">São Pedro (29 de Junho)</span>
+              <span class="fact-label">Orçamento Anual:</span>
+              <span class="fact-value">R$ 473,7M (LOA)</span>
             </div>
             <div class="fact-item">
               <span class="fact-label">PABX Prefeitura:</span>
               <span class="fact-value">(14) 3404-1000</span>
+            </div>
+            <div class="fact-item">
+              <span class="fact-label">UPA 24 Horas:</span>
+              <span class="fact-value" style="color: #f87171;">(14) 3404-2200</span>
             </div>
           </div>
 

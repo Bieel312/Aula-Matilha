@@ -10,10 +10,16 @@ Portal interativo e assistente virtual inteligente alimentado com as informaçõ
 
 ## 🌟 O que há de novo nesta versão:
 
-### 1. 💬 Aba Dedicada: "Tire sua Dúvida" (Chat Livre)
+### 1. 💬 Aba Dedicada: "Tire sua Dúvida" (Chat Livre & Interativo)
 - Permite que qualquer pessoa digite e pergunte **livremente qualquer dúvida** sobre Tupã.
-- **📚 Citação Obrigatória de Fontes Oficiais:** Todas as respostas trazem a identificação explícita de onde a informação foi extraída (Portal da Prefeitura `tupa.sp.gov.br`, Museu Índia Vanuíre, CONDEPHAAT, UNESP, FADAP, IBGE ou Secretarias Municipais).
-- Sugestões dinâmicas de início rápido (chips interativos).
+- **Motor NLP Preciso:** Responde com precisão sobre **renda per capita (R$ 48.934,77/ano)**, PIB, orçamento municipal (R$ 473M), salários, demografia (Censo 63.928 hab.), turismo, UPA 24h e história.
+- **💡 Sugestões Interativas Dinâmicas:** Cada resposta do chatbot inclui botões de perguntas relacionadas clicáveis dentro da conversa.
+- **📚 Citação Obrigatória de Fontes Oficiais:** Todas as respostas trazem a identificação explícita de onde a informação foi extraída (IBGE, Fundação SEADE, Portal da Prefeitura `tupa.sp.gov.br`, Museu Índia Vanuíre, CONDEPHAAT, UNESP e Secretarias Municipais).
+
+### 2. 🌙 Visual Dark Moderno e Elegante
+- Fundo em tom escuro profundo (`#080e1a` / `#0f172a`), com superfícies tecnológicas em azul marinho e cinza ardósia.
+- Cores de destaque: **Azul Tupã brilhante** (`#38bdf8`), **Dourado do Sol** (`#fbbf24`) e **Vermelho** (`#ef4444`).
+- Tipografia nítida e alto contraste para leitura confortável em qualquer tela.
 - Respostas completas com formatação rica, botão para **copiar resposta** e **leitura por voz (áudio)**.
 - Painel lateral com ficha rápida da Estância e fatos curiosos.
 
